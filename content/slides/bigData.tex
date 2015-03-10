@@ -1,0 +1,434 @@
+%% Big Data I: Ingeniería de datos
+%
+% Felipe Ortega, Javier M. Moguerza
+% DEIO, URJC.
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Big data: problemas y soluciones tecnológicas}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%---------------
+
+\begin{frame}{}
+\begin{center}
+ \huge Big data: problemas y soluciones tecnológicas
+\end{center}
+\end{frame}
+
+%---------------
+
+\begin{frame}{Mejor definición de big data hasta la fecha...}
+\begin{center}
+    \includegraphics[width=1\textwidth]{figs/Dan-Ariely-bigdata.jpeg}
+\end{center}
+\end{frame}
+
+%---------------
+
+\begin{frame}{Dimensiones big data}
+\begin{wideitemize}
+ \item Término controvertido, incluso para los propios profesionales.
+ \item Consenso: definido por las 3 ``Vs'' [2-3].
+ \begin{itemize}
+  \item \textbf{Volumen} (tamaño, procesamiento).
+  \item \textbf{Velocidad} (adquisición, procesamiento).
+  \item \textbf{Variedad} (dimensiones).
+ \end{itemize}
+ \item A veces, se añade más factores (V's):
+ \begin{itemize}
+  \item \textit{veracidad} (integridad de datos, corrección...)
+  \item \textit{valor} (el valor añadido que
+ aporta big data para el negocio o dominio de aplicación).
+  \item \textit{variabilidad}, \textit{visualización}, etc.
+ \end{itemize}
+
+ \item Lo importante: no es sólo una cuestión de tamaño.
+\end{wideitemize}
+ 
+\end{frame}
+
+%%---------------
+
+\begin{frame}{¿Cuántos son ``muchos datos''?}
+\begin{wideitemize}
+ \item Típicamente, más de los que podamos procesar en un sólo computador
+ (incluso en un servidor muy potente).
+ \begin{itemize}
+  \item Por necesitar demasiada memoria.
+  \item Por requerir demasiado espacio de almacenamiento.
+  \item Porque no podemos almacenar el flujo de datos que nos llega de forma
+  permanente (procesado \textit{streaming} vs. \textit{batch}).
+  \item Porque necesitamos resultados con gran rapidez para tomar decisiones
+  operativas.
+ \end{itemize}
+ 
+ \item A continuación, presentamos algunos ejemplos [4].
+
+\end{wideitemize}
+ 
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Algunos números sobre big data}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{wideitemize}
+     \item \textbf{Walmart}.
+     \begin{itemize}
+      \item Fortune 500 Global.
+      \item Mayor empleador privado del mundo (+2 millones empleados).
+      \item Mayor distribuidor minorista del mundo.
+     \end{itemize}
+
+     \item Sus servidores procesan más de un millón de transacciones de clientes
+     cada hora.
+     \item Sus bases de datos almacenan más de 2,5 Petabytes (1 Petabyte = 1024 Terabytes).
+     
+    \end{wideitemize}
+
+    \end{column}
+    \begin{column}{.3\textwidth}
+    \vspace*{1cm}
+    \hspace*{-0.5cm}
+    \includegraphics[width=1\textwidth]{figs/Walmart-exterior.jpg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Algunos números sobre big data}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{wideitemize}
+     \item \textbf{LHC (CERN)}.
+     \begin{itemize}
+      \item Mayor y más potente colisionador de partículas del mundo.
+      \item Una de las mayores fuentes de datos de experimentos científicos del
+      mundo.
+     \end{itemize}
+
+     \item Se estima que genera unos 15 Petabytes de información anualmente.
+     \item Se analizan en un sistema computacional distribuído y tolerante a fallos
+     (grid computing):
+     \begin{itemize}
+      \item 170 centros de computación,
+      \item 36 países participantes.
+      \item Red global de comunicación.
+     \end{itemize}
+
+    \end{wideitemize}
+
+    \end{column}
+    \begin{column}{.3\textwidth}
+    \vspace*{2cm}
+    \hspace*{-0.5cm}
+    \includegraphics[width=1\textwidth]{figs/CERN-LHC.jpg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Algunos números sobre big data}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{wideitemize}
+     \item \textbf{Datos en la Web}.
+     \item \textbf{Facebook} opera sobre 500 Terabytes de información de registro de actividad
+     de sus usuarios, y sobre cientos de Terabytes de imágenes.
+     \item Cada minuto se cargan 100 horas de vídeo en \textbf{Youtube}, y más de 135.000
+     horas de vídeo son vistas.
+     \item \textbf{Twitter} sirve a casi 600 millones de usuarios que generan 9.100 tweets
+     cada segundo.
+     \item Los sistemas de \textbf{eBay} procesan más de 100 Petabytes de información al día.
+
+    \end{wideitemize}
+
+    \end{column}
+    \begin{column}{.3\textwidth}
+    \vspace*{2cm}
+    \hspace*{-0.5cm}
+    \includegraphics[width=1\textwidth]{figs/Internet-map.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Algunos números sobre big data}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{wideitemize}
+     \item \textbf{Sector aeronáutico}.
+     \item Un avión comercial de Boeing puede generar alrededor de 10 Terabytes
+     de información operacional cada 30 minutos de funcionamiento.
+     \item Por tanto, en un vuelo transatlántico se pueden llegar a generar
+     varios cientos de Terabytes de información.
+     \item Se realizan alrededor de 22.000 vuelos diarios en todo el mundo.
+     \item Esto nos ofrece una idea de la ingente cantidad de datos generada
+     por máquinas y redes de sensores de manera regular.
+
+    \end{wideitemize}
+
+    \end{column}
+    \begin{column}{.3\textwidth}
+    \vspace*{2cm}
+    \hspace*{-0.5cm}
+    \includegraphics[width=1\textwidth]{figs/Emirates-Landing.jpg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Necesidades computacionales}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+    \begin{wideitemize}
+     \item Precisamos potencia y capacidad de computación para ingeniería de
+     datos.
+     \item Problema: el tráfico de datos crece a mayor velocidad que nuestra
+     capacidad de computación.
+     \begin{itemize}
+      \item (2002-2009): volúmen global del tráfico de datos se 
+      multiplicó por 56; potencia de computación se multiplicó sólo por 16.
+      \item (1998-2005): centros de datos crecieron en tamaño un 173\%
+      anual [4], mientras que la eficiencia en consumo energético no mejoró a la par.
+      \item Esto generará una enorme \textit{huella de consumo energético} para análisis
+      de datos.
+      \item 50\% de los centros de cómputo de datos (aprox.) solo funcionan
+      al 50\% de su rendimiento máximo.
+     \end{itemize}
+
+
+    \end{wideitemize}
+
+    \end{column}
+    \begin{column}{.3\textwidth}
+    \vspace*{1.7cm}
+    \includegraphics[width=0.65\textwidth]{figs/jcartier-Cluster.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tipos de datos según su estructura}
+
+\begin{wideitemize}
+  \item \textbf{Datos estructurados}: Tienen una serie de campos con significado
+   predefinido. Cada campo está asociado a un tipo de datos (numérico, textual,
+   doble precisión, objeto serializado...). Ejemplo: RDBMS.
+   
+   \item \textbf{Datos semi-estructurados}: Se representan mediante un formato
+   de codificación que aporta cierta estructura e información sobre los datos
+   (metadatos). Sin embargo, su contenido (número de campos, formato de cada
+   campo, etc.) puede ser muy variado. Ej: documentos XML.
+   
+   \item \textbf{Datos no estructurados}: El formato de los datos no está claramente
+   definido de forma previa. Pueden aparecer mezclados datos numéricos, textuales
+   o multimedia, y en un orden imprevisible.
+
+\end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Soluciones para datos no estructurados}
+    \begin{wideitemize}
+     \item Necesitamos tecnologías y métodos flexibles para gestionar este tipo de
+     fuentes de datos (necesidades dinámicas e imprevisibles). Ejemplo:
+     \textbf{tecnologías NoSQL}.
+     \begin{itemize}
+      \item Ejemplo: Esquemas \textbf{clave-valor}.
+      
+      \item Almacenan duplas (\textit{clave-valor}), donde las claves asociadas a
+      cada valor son únicas (para acelerar las búsquedas) y los valores pueden ser
+      también objetos complejos (tales como listas, tablas hash, etc).
+      
+      \item Ejemplo: Bases de datos \textbf{documentales}.
+      
+      \item Almacenan documentos representados en cierto formato de condificación
+      (tales como XML, JSON o YAML).
+      
+      \item También siguen un esquema de almacenamiento \textit{clave-valor}, pero
+      el contenido de los documentos es arbitrario, y además se ofrecen mecanismos para
+      realizar búsquedas basadas en dichos contenidos (utilizando los metadatos del
+      sistema de condificación).
+     \end{itemize}
+
+    \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tipos de procesamiento de datos}
+ \begin{wideitemize}
+ 
+ \item Clasificación de procesamiento de datos según requisitos de interacción:
+ 
+\end{wideitemize}
+
+\begin{enumerate}
+   \item Procesamiento \textbf{batch} (también llamado \textit{offline}): No
+   existen requisitos estrictos en cuanto al tiempo que podemos emplear en
+   la preparación, transformación y computación de los datos almacenados.
+   Ejemplo: MapReduce (Hadoop).\\
+   
+   \item Procesamiento de \textbf{flujos de datos} (\textit{streaming}, también
+   llamado \textit{online}): Existen requisitos estrictos sobre el tiempo máximo
+   que podemos emplear para preparar, trasformar y procesar los datos. Puede
+   deberse a varias razones:
+   \begin{itemize}
+    \item Análisis interactivo.
+    \item Interacción con usuarios finales (servicios, dashboards, etc.).
+    \item Excesiva velocidad o volumen de datos (no podemos almacenar localmente).
+   \end{itemize}
+
+
+  \end{enumerate}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tipos de procesamiento de datos}
+ \begin{columns}[T]
+    \begin{column}{.5\textwidth}
+    \begin{figure}
+    \includegraphics[width=0.65\textwidth]{figs/conveyor-sushi.jpg} 
+    \caption{Procesamiento \textit{streaming}}
+    \end{figure}
+
+    \end{column}
+    \begin{column}{.5\textwidth}
+    \vspace*{1.7cm}
+    \begin{figure}
+    \includegraphics[width=0.9\textwidth]{figs/spices-store.jpg}
+    \caption{Procesamiento \textit{batch}}
+    \end{figure}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Esquema procesamiento \textit{batch}}
+ \includegraphics[width=\textwidth]{figs/procesamiento-batch.png}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Esquema procesamiento \textit{streaming}}
+ \includegraphics[width=0.95\textwidth]{figs/procesamiento-streaming.png}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tendencias procesamiento de datos}
+ \begin{wideitemize}
+ 
+ \item El procesamiento \textbf{streaming se está imponiendo} rápidamente.
+ 
+ \item MapReduce no es suficientemente flexible ni rápido para muchos problemas
+ de análisis de datos.
+ 
+ \begin{itemize}
+  \item \href{http://www.datacenterknowledge.com/archives/2014/06/25/google-dumps-mapreduce-favor-new-hyper-scale-analytics-system/}
+  {Junio 2014: Google declara que dejaron de usar MapReduce hace años.}
+ \end{itemize}
+
+ \item MapReduce no es adecuado para muchos modelos de análisis de datos, que
+ incluyen operaciones iterativas.
+ 
+ \begin{itemize}
+  \item Exigen un importante esfuerzo para programar estos procesos de modo que
+  se reduzca el número de pasadas sobre los datos (cada iteración es muy cara).
+ \end{itemize}
+
+ \item Por contra, los sistemas de procesado \textit{streaming} se pueden adaptar
+ a muchos más tipos de análisis, han sido concecibos para ser rápidos y escalables.
+ 
+\end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tendencias procesamiento de datos}
+ 
+ \begin{wideitemize}
+  
+  \item En procesado \textit{streaming} se crean flujos de \textbf{datos inmutables}, que
+  se procesan o transforman para generar nuevos flujos de datos. Se puede añadir 
+  cierta \textit{persistencia}.
+  
+  \item También es posible combinar \textit{streaming} con procesado \textit{batch},
+  (la llamada \textbf{arquitectura lambda}) pero cuidado con la duplicidad de trabajo.
+  
+  \item Pero exige ciertos requisitos adicionales:
+  
+  \begin{itemize}
+   \item Sistemas de colas de mensajes / buffer de entrada que almacenen temporalmente
+   los datos hasta que entren al flujo de procesado (idealmente sin péridas).
+   
+   \item Incluir sistemas automáticos de distribución de carga y tolerancia ante
+   fallos de nodos de procesamiento.
+   
+  \end{itemize}
+
+  
+ \end{wideitemize}
+
+ 
+\end{frame}
+
+
+%%---------------
+
+\begin{frame}{Bibliografía}
+\begin{enumerate}
+ \item Provost, F., Fawcett, T. Data Science for Business. O'Reilly Media Inc. Julio 2013.
+ \item Cathy O'Neil, Rachel Schutt. Doing Data Science: Straight Talk from the Frontline.
+ O'Reilly Media Inc. Octubre 2013.
+ \item Doug Laney. 3d Data management: controlling data volume, velocity and variety.
+ Appl. Delivery Strategies Meta Group (949)(2001).
+ \item Kambatla, K. et al. Trends in big data analytics. Journal of Parallel and Distributed
+ Computing (in press). Elsevier. Enero 2014.
+\end{enumerate}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Créditos}
+\begin{enumerate}
+ \item Imagen Walmart-exterior.jpg por see. CC-BY-SA-3.0, via Wikimedia Commons.
+ \item Imagen inside-CERN-LHC por Juhanson. CC-BY-SA-3.0, via Wikimedia Commons.
+ \item Imagen Internet map por The Opte Project. CC-BY-2.5 , via Wikimedia Commons.
+ \item Imagen Boeing Emirates por Faisal Akram desde Dhaka, Bangladesh. CC-BY-SA-2.0, via Wikimedia Commons
+ \item Imágenes clipart obtenidas de Openclipart, todas ellas disponibles en dominio público.
+ \item Todos los logos de proyectos y/o empresas son marcas registradas, utilizados simplemente con fines ilustrativos.
+\end{enumerate}
+\end{frame}
+
+%%--------------
+
+\begin{frame}{Contacto}
+\begin{huge}
+e-mail: felipe.ortega@urjc.es\\~\\
+Twitter: @jfelipe
+\end{huge}
+\end{frame}
+
+%%---------------

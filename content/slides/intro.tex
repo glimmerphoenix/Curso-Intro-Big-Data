@@ -1,0 +1,577 @@
+%% Big Data I: Ingeniería de datos
+%
+% Felipe Ortega, Javier M. Moguerza
+% DEIO, URJC.
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducción a ingeniería de datos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{}
+\begin{center}
+ \huge Introducción a la ingeniería de datos
+\end{center}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Objetivos del curso}
+\begin{wideitemize}
+ \item Introducción a la metodología, aspectos técnicos y de infraestructura para 
+ ingeniería de datos.
+ \item  Fundamentos para comprender el papel y la importancia  de los métodos
+ y tecnologías de ingeniería de datos en la actualidad.
+ \item Ilustraremos con numerosos ejemplos tecnológicos y casos de estudio.
+ \item Conoceremos tendencias actuales en ingeniería de datos e infraestructuras
+ asociadas.
+\end{wideitemize}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{¿Qué es la ciencia de datos?}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{figs/data-science-venn-diagram.jpeg} 
+\caption{\href{http://drewconway.com/zia/2013/3/26/the-data-science-venn-diagram}
+{Diagrama de Venn de la Ciencia de Datos (por Drew Conway)}.}
+\end{figure}
+ 
+\end{frame}
+
+%---------------
+
+\begin{frame}{Data-intensive science}
+ \begin{wideitemize}
+  \item Avances científicos fundamentados en el análisis de grandes y complejos volúmenes de
+  datos, posibilitados por los avances tecnológicos en computación y los métodos
+  de estudio [1].
+  
+  \item Aparece como evolución de los 3 paradigmas científicos anteriores:
+  \begin{enumerate}
+   \item Ciencia empírica.
+   \item Ciencia teórica.
+   \item Ciencia computacional.
+  \end{enumerate}
+
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ciencia de datos: multidisciplinariedad}
+ \begin{wideitemize}
+  \item Este solape entre diferentes disciplinas también sugiere que será muy
+  complicado encontrar una sola persona que acumule todo el conocimiento necesario
+  para realizar este trabajo con garantías:
+  \begin{itemize}
+   \item Matemáticas.
+   \item Estadística.
+   \item Computación.
+   \item Desarrollo de software.
+   \item Data mining/machine learning.
+   \item Comunicación.
+   \item Visualización de datos.
+   \item Experiencia en el área de negocio/aplicación.
+  \end{itemize}
+
+  \item La única solución es contar con equipos de trabajo \textbf{multidisciplinares}.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ingeniería + análisis de datos}
+ \begin{figure}
+\centering
+\includegraphics[width=0.99\textwidth]{figs/ingdatos-workflow.png} 
+\end{figure}
+Basado en Fig 1-1 de [2].
+
+\end{frame}
+
+%---------------
+
+% ---------------
+
+\begin{frame}{Tareas en ingeniería de datos}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+  \begin{wideitemize}
+  \item Obtención de datos.
+  \begin{itemize}
+   \item Gestión de múltiples fuentes de datos (offline vs. tiempo real).
+  \end{itemize}
+
+  \item Almacenamiento de datos.
+  \begin{itemize}
+   \item Datos estructurados vs. no estructurados.
+   \item Datos enlazados.
+   \item Metadatos y estándares de representación.
+  \end{itemize}
+
+  \item Preparación de datos.
+  \begin{itemize}
+   \item Limpieza de datos.
+   \item Datos no disponibles (imputación).
+  \end{itemize}
+ \end{wideitemize}
+    \end{column}
+    \begin{column}{.20\textwidth}
+    \vspace*{1.5cm}
+    \includegraphics[width=0.9\textwidth]{figs/checklist.png}
+    \end{column}
+  \end{columns}
+  
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tareas en ingeniería de datos}
+ \begin{wideitemize}
+  \item Tratamiento de datos.
+  \begin{itemize}
+   \item Organización de conocimiento (ontologías).
+   \item Identificación/extracción de datos relevantes.
+  \end{itemize}
+
+  \item Cómputo y paralelización.
+  \begin{itemize}
+   \item Particionado y compresión de datos.
+   \item Multiprocesado y procesamiento paralelo (clusters, cloud computing).
+   \item Paradigmas de cómputo (ej. Map Reduce).
+  \end{itemize}
+ \end{wideitemize}
+ 
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Tareas en ingeniería de datos: otros aspectos}
+ \begin{wideitemize}
+  \item Tecnologías y recursos de computación.
+  \begin{itemize}
+   \item Necesidad de adquirir nociones sobre el impacto de diferentes alternativas
+   sobre el rendimiento de la infraestructura de computación.
+   \item Planificación estratégica de uso de recursos.
+  \end{itemize}
+
+  \item Desarrollo y gestión de software.
+  \begin{itemize}
+   \item El código se convierte en activo fundamental.
+   \item Importancia del software libre como opción preferencial para análisis
+   de datos.
+  \end{itemize}
+
+  \item Gestión de datos.
+  \begin{itemize}
+   \item Mantener nuestros datos organizados, organización y aprovechamiento de
+   metadatos (datos acerca de los datos).
+  \end{itemize}
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Data mining/machine learning}
+ \begin{wideitemize}
+  \item \textbf{Data mining}: Intentamos descubrir patrones o información que están aparentemente
+  ocultas en los datos.
+  \item \textbf{Machine learning}: Usamos los datos para entrenar algoritmos que luego
+  realizarán tareas de forma automática (e.g. clasificación).
+  \begin{itemize}
+   \item \textit{Métodos supervisados}: Se proporcionan un listado de clases o grupos
+   a priori, basado en el criterio de expertos (se supervisa el proceso).
+   \item \textit{Métodos no supervisados}: No se proporciona de antemano información sobre
+   los grupos o clases, sino que se espera encontrarlos de forma natural en los
+   datos.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Clasificación de tipos de problemas}
+ \begin{wideitemize}
+  \item Podemos identificar una serie de \textbf{problemas típicos} asociados al análisis
+  de datos [2].
+  
+  \item 1. \textbf{Clasificación y estimación de probabilidades}: Intentamos predecir para
+  cada elemento o individuo en un grupo a qué clase pertenece, de entre un conjunto
+  finito de clases previamente establecidas (y con frecuencia, mutuamente excluyentes).
+  
+  \item 2. \textbf{Estimación/predicción de valores}: Creamos modelos estadísticos que nos
+  permitan estimar el valor de una o varias variables de interés que describen a un
+  elemento o individuo, o bien predecir su valor futuro.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Clasificación de tipos de problemas}
+ \begin{wideitemize}
+  \item 3. \textbf{Patrones de similitud}: Intentamos identificar elementos o individuos similares
+  a uno ya dado, basado en la información descriptiva que tenemos sobre ellos.
+  \begin{itemize}
+   \item Ejemplo: empresa interesada en descubrir otras compañías similares a
+   sus mejores clientes para aumentar su cuota de mercado.
+  \end{itemize}
+  
+  \item 4. \textbf{Clustering} (conglomerados): Intentamos agrupar individuos o elementos en
+  grupos basándonos en criterios de similitud, pero sin un propósito inicial.
+  \begin{itemize}
+   \item Ejemplo: ¿Podemos agrupar los clientes de nuestra compañía en grupos
+   o segmentos con similares características?
+  \end{itemize}
+  
+  \item 5. \textbf{Co-ocurrencia}: Intentamos encontrar asociaciones entre entidades o
+  individuos basándonos en sucesos o transacciones en las que están involucrados.
+  \begin{itemize}
+   \item Ejemplo: ``Los clientes que compraron el producto X también compraron...''.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Clasificación de tipos de problemas}
+ \begin{wideitemize}
+  \item 6. \textbf{Profiling}: Caracterización del comportamiento típico de un
+  individuo, grupo o población.
+  \begin{itemize}
+   \item Ejemplo: Patrones habituales de uso de las personas que poseen un smartphone.
+  \end{itemize}
+  
+  \item 7. \textbf{Predicción de enlaces}: Se pretende descubrir potenciales
+  nuevas conexiones entre los elementos que pertencen a una red (grafo o digrafo).
+  \begin{itemize}
+   \item Ejemplo: ``Puede que conozcas también a los siguientes amigos y quieras
+   agregarlos a tu red...''.
+  \end{itemize}
+  
+  \item 8. \textbf{Reducción de datos}: Tranformamos un conjunto de datos grande
+  o con muchas dimensiones en otro más manejable, pero que siga siendo descriptivo
+  respecto al proceso o fenómeno que estamos estudiando.
+  \begin{itemize}
+   \item Ejemplo: análisis de componentes principales.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Clasificación de tipos de problemas}
+ \begin{wideitemize}
+  \item 9. \textbf{Causalidad}: Comprender qué eventos, acciones o factores
+  influyen sobre un fenómeno de interés.
+  \begin{itemize}
+   \item Ejemplo: relación entre el consumo de tabaco y la aparación de ciertos
+   tipos de tumores.
+   \item Más complicado de demostrar de lo que podemos imaginar a priori.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{DDD: Data-Driven Decision-making}
+ \begin{wideitemize}
+  \item Cuidado con los \textbf{riesgos}:
+  \begin{quotation}
+``Puesto que podemos descubrir información y conocimiento directamente en
+los datos, puede surgir la tentación de confiarnos ciégamente a los resultados
+que nos ofrezcan las máquinas que ejecutan estos algoritmos''.
+  \end{quotation} 
+  
+  \item Solución: la \textbf{toma de decisiones} se debe hacer basada en
+  \textbf{evidencias} empíricas (\textit{data-driven}, \textit{evidence-based})...
+  
+  \item ...pero también necesitamos \textbf{interpretar} los resultados basándonos en la
+  \textbf{experiencia} sobre un área de aplicación.
+  
+  \begin{itemize}
+   \item Ejemplo: métodos bayesianos permiten incluir conocimiento o teorías previas
+   al cálculo de nuestros modelos (\textit{prior distributions}).
+  \end{itemize}
+
+  
+  \item No vale para ``echar la culpa a los datos o al análisis'' si la decisión 
+  fue incorrecta.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Replicabilidad}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{}
+\begin{center}
+ \huge Replicabilidad en análisis de datos
+\end{center}
+\end{frame}
+
+%---------------
+
+\begin{frame}{Replicabilidad: elementos}
+ \begin{wideitemize}
+  \item Conjuntos de \textbf{datos} que se han utilizado.
+  \item \textbf{Infraestructura} equivalente (recursos computacionales).
+  \item \textbf{Software}:
+  \begin{itemize}
+   \item \textbf{Código} para llevar a cabo el análisis.
+   \item \textbf{Dependencias} satisfechas (otros programas, bibliotecas, S.O., etc.).
+   \item \textbf{Configuración} original para el análisis.
+  \end{itemize}
+  
+  \item Metodología.
+  \begin{itemize}
+   \item Explicación detallada del \textbf{proceso} (limpieza y preparación de
+   datos, análisis, resultados, conclusiones).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Replicabilidad: workflow}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.95\textwidth]{figs/replica-workflow.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Espectro niveles de replicación}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.95\textwidth]{figs/espectro-replica.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ejemplos análisis no replicables}
+ \begin{wideitemize}
+  \item \textbf{Oncología} [3]: Dpto. Biotecnología de la firma Amgen (Thousand 
+  Oaks) sólo confirmó 6 de un total de 53 artículos emblemáticos. Bayer 
+  HealthCare (Alemania) pudo validar un 25\% de estudios.
+  \item \textbf{Psicología} [4]: De un total de 249 artículos de la APA, el 73\% 
+  de los autores no respondieron sobre sus datos en 6 meses.
+  \item \textbf{Economía y finanzas} [5]: Diferentes paquetes software producen 
+  resultados muy distintos con técnicas estadísticas directas aplicadas sobre 
+  datos idénticos a los originales.
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Control de versiones}
+ \begin{wideitemize}
+  \item Herramientas avanzadas de gestión de código software.
+  \item Ejemplos: Git, Mercurial.
+  \begin{itemize}
+   \item Desarrollo distribuido y altamente escalable.
+   \item Control de cambios e historial.
+   \item Orientación a micro-cambios.
+   \item Desarrollo no lineal (ramas paralelas, mezcla de cambios, forks).
+   \item Posibilidad de mantener múltiples repositorios remotos.
+   \item Empaquetado eficiente para envío de cambios, resolución de conflictos avanzada.
+  \end{itemize}
+
+ \item Pero lleva asociado cierto coste de aprendizaje.
+ \begin{itemize}
+  \item ...¡que merece la pena asumir!
+ \end{itemize}
+
+ \item Integrados con IDEs populares (RStudio, Eclipse).
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Documentando el proceso}
+ \begin{columns}[T]
+    \begin{column}{.5\textwidth}
+    \includegraphics[width=1\textwidth]{figs/KnuthAtOpenContentAlliance.jpg}
+%     \tiny By Flickr user Jacob Appelbaum, uploaded to en.wikipedia by users 
+%     BeSherman, Duozmo (Flickr.com (via en.wikipedia)) 
+%     [CC-BY-SA-2.5], via Wikimedia Commons
+    \end{column}
+    \begin{column}{.5\textwidth}
+    \vspace*{1cm}
+    \begin{quotation}
+     ``I believe that the time is   ripe for significantly better documentation 
+     of programs, and that we can best achieve this by considering programs 
+     to be [\texttt{interactive}] works of literature''.\\
+     — Donald Knuth, ``Literate Programming''. 1992.
+    \end{quotation}
+
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{IPython}
+\begin{itemize}
+ \item Entorno de programación interactiva (incluye creación de cuadernos).
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.95\textwidth]{figs/ipython.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Conclusiones}
+ \begin{wideitemize}
+  \item La ciencia de datos es una mezcla de Matemáticas y Estadística, 
+  ingeniería y conocimiento del área de aplicación.
+  \item Elevada influencia de los aspectos tecnológicos y de implementación...
+  \item … pero los otros dos factores son igual de determinantes para un 
+  análisis de datos exitoso. 
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Conclusiones}
+ \begin{columns}[T]
+    \begin{column}{.4\textwidth}
+    \includegraphics[width=1\textwidth]{figs/OReilly.jpg}
+    \end{column}
+    \begin{column}{.6\textwidth}
+    \vspace*{2.5cm}
+    \begin{quotation}
+     ``Data is the next Intel inside''.\\
+     — Tim O'Reilly,\\
+     What is Web 2.0? 2004.
+    \end{quotation}
+
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Conclusiones}
+ \begin{columns}[T]
+    \begin{column}{.35\textwidth}
+    \includegraphics[width=1\textwidth]{figs/SherlockHolmes.jpg}
+    \end{column}
+    \begin{column}{.65\textwidth}
+    \vspace*{1.3cm}
+    \begin{quotation}
+     ``I never guess. It is a capital mistake to theorize before one has data. 
+     Insensibly one begins to twist facts to suit theories, instead of theories 
+     to suit facts''.\\
+     — Sherlock Holmes (By Sir Arthur Conan Doyle).
+    \end{quotation}
+
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Conclusiones}
+ \begin{columns}[T]
+    \begin{column}{.5\textwidth}
+    \includegraphics[width=0.75\textwidth]{figs/questionmark.png}
+    \end{column}
+    \begin{column}{.5\textwidth}
+    \vspace*{1.5cm}
+    \hspace*{-1cm}
+    \begin{quotation}
+     ``If you don't know how to ask the right question, you discover nothing''.\\
+     — W. Edward Deming.
+    \end{quotation}
+
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Bibliografía}
+\begin{enumerate}
+ \item Bell, G. et al. Beyond the data deluge. Science 323 (5919), 2009; pp. 1297-1298.
+ \item Provost, F., Fawcett, T. Data Science for Business. O'Reilly Media Inc. Julio 2013.
+ \item Begley, C. Glenn, and Lee M. Ellis. "Drug development: Raise standards 
+ for preclinical cancer research." Nature 483.7391 (2012): 531-533.
+ \item Wicherts, Jelte M., et al. "The poor availability of psychological 
+ research data for reanalysis." American Psychologist 61.7 (2006): 726.
+ \item Burman, Leonard E., W. Robert Reed, and James Alm. "A call for replication 
+ studies." Public Finance Review 38.6 (2010): 787-793.
+\end{enumerate}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Créditos}
+\begin{enumerate}
+ \item Donald Knuth: Por Smallpox at it.wikipedia (Transferred from it.wikipedia) 
+ [CC-BY-SA-2.0 (\url{http://creativecommons.org/licenses/by-sa/2.0)}], a 
+ través de Wikimedia Commons.
+ \item Tim O'Reilly: By Robert Scoble from Half Moon Bay, USA (Tim O'Reilly 
+ heads panel on new advertising) [CC-BY-2.0 \url{(http://creativecommons.org/licenses/by/2.0)}], 
+ via Wikimedia Commons.
+ \item Sherlock Holmes: By Sidney Paget(1860-1908) [Public domain], via Wikimedia Commons.
+ \item Imágenes clipart obtenidas de Openclipart, todas ellas disponibles en dominio público.
+ \item Todos los logos de proyectos y/o empresas son marcas registradas, utilizados simplemente con fines ilustrativos.
+\end{enumerate}
+\end{frame}
+
+%%---------------
+
+%%---------------
+
+\begin{frame}{Contacto}
+\begin{huge}
+e-mail: felipe.ortega@urjc.es\\~\\
+Twitter: @jfelipe
+\end{huge}
+\end{frame}
+
+%%---------------
+
+

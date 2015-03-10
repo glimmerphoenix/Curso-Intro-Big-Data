@@ -1,0 +1,128 @@
+\documentclass[10pt]{beamer}
+%\usetheme{default}
+%\usetheme{Warsaw}
+%\usetheme{boxes}
+%\usetheme{Pittsburgh}
+\usetheme{DEIOURJC}
+ 
+\mode<presentation>
+
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{etex}
+
+\usepackage{listings}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+%\usepackage{beamerthemesplit}
+%\usepackage{graphicx,times,/papers/styles/psfig,amsmath} % Add all your packages here
+\usepackage{graphicx,times,amsmath} % Add all your packages here
+\usepackage{pstricks,pst-node,pst-text,pst-3d}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+  \newcommand{\field}[1]{\mathbb{#1}}
+\usepackage{epsf}
+\usepackage{algorithm,algorithmic}
+
+% Hyperlinks
+\usepackage{hyperref}
+\usepackage{url}
+
+% Redefine font size for captions
+\setbeamerfont{caption}{size=\footnotesize}
+\usepackage[labelsep=endash, figurename=Fig.]{caption}
+
+\DeclareGraphicsExtensions{.pdf}
+
+\newcommand{\OO}{{\rm O}}
+
+%Espacio extra entre líneas itemize
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{8pt}}{\enditemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[Big Data I: Ingeniería de datos]
+{Big Data I:\\~\\
+Ingeniería de datos}
+
+% \author[Felipe Ortega, Javier M. Moguerza]{
+% Felipe Ortega, Javier M. Moguerza\\
+% Dpto. de Estad\'{i}stica e Investigaci\'{o}n Operativa\\
+% Universidad Rey Juan Carlos
+% }
+
+\author[Felipe Ortega]{
+Felipe Ortega\\
+Dpto. de Estadística e Investigación Operativa\\
+Universidad Rey Juan Carlos
+}
+
+\date{\today}
+
+% Seleccionar archivo a compilar
+\includeonly{./slides/intro}
+
+\begin{document}
+
+% ESTO ES PARA QUE NO HAYA footline EN LA titlepage
+{\setbeamertemplate{footline}{} 
+\begin{frame}
+  \titlepage
+\end{frame}
+} \addtocounter{framenumber}{-1}
+
+\begin{frame}{}
+ \vspace{3cm}
+ \begin{flushright}
+ \includegraphics[width=0.3\textwidth]{figs/by-sa.png}\\
+    \begin{small}(cc)2015 Felipe Ortega.\\
+    Algunos derechos reservados.\\
+    Este documento se distribuye bajo una licencia
+    Creative Commons Reconocimiento-CompartirIgual 4.0,
+    disponible en:
+    \url{http://creativecommons.org/licenses/by-sa/4.0/es/} 
+    \end{small}
+ \end{flushright}
+ 
+\end{frame}
+
+% TABLE OF CONTENT
+% \begin{frame}{Contenidos}
+%   \tableofcontents
+% \end{frame}
+
+% MATRIZ DE CONTENIDOS INICIALES
+% Curso de 0.1 créditos para la ETSIT (9 abril 2014)
+% \include{slides/intro-big-data.tex}
+
+% Curso ETSII de 1 crédito.
+% Big data I: Introducción a la ingeniería de datos (marzo-abril 2015)
+
+% Introducción a la ingeniería de datos
+\include{./slides/intro} %% DONE
+% Big data: problemas y soluciones tecnológicas
+\include{./slides/bigData} %% DONE
+% Obteción de datos y formatos de representación
+\include{./slides/dataInput} %% DONE
+% Preparación y transformación de datos
+\include{./slides/dataPreparation}  %% TODO: IN PROGRESS
+% Almacenamiento de datos: sistemas tradicionales vs. NoSQL
+\include{./slides/dataStorage}  %% TODO: IN PROGRESS
+% Computación científica y paralelización
+\include{./slides/computing}  %% TODO: IN PROGRESS
+\include{./slides/communication}  %% DONE
+% El paradigma MapReduce: ecosistema Hadoop
+\include{./slides/hadoopEco} %% TODO: IN PROGRESS
+% Consultas y análisis interactivo con big data
+\include{./slides/interactive}
+% TODO: Gestión de datos
+\include{./slides/dataManagement.tex}
+%TODO:
+% Referencias
+%\include{references.tex}
+
+\end{document}
+
