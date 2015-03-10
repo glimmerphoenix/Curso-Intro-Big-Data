@@ -1,0 +1,329 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Obtención de datos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{}
+\begin{center}
+ \huge Obtención de datos
+\end{center}
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Obtención de datos}
+ \begin{columns}[T]
+    \begin{column}{.7\textwidth}
+  \begin{wideitemize}
+  \item Etapa crucial y con frecuencia infravalorada.
+  \item Con frecuencia, la obtención y preparación de datos consume cerca del
+  \textbf{85\% del tiempo total} del proyecto de análisis de datos.
+
+  \item Diferentes retos.
+  \begin{itemize}
+   \item Multiplicidad de fuentes.
+   \item Métodos de obtención de datos (\textit{scrapping}, \textit{streaming}, APIs...).
+   \item Diferentes formatos de representación.
+   \item Consolidación de datos obtenidos.
+  \end{itemize}
+
+ \end{wideitemize}
+    \end{column}
+    \begin{column}{.30\textwidth}
+    \vspace*{0.8cm}
+    \includegraphics[width=1\textwidth]{figs/input.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Obtención de datos}
+ \begin{wideitemize}
+  \item Multiplicidad de fuentes
+\end{wideitemize}
+  \begin{figure}
+   \centering
+   \includegraphics[width=.95\textwidth]{figs/multisource.png}
+  \end{figure}
+
+\end{frame}
+\begin{frame}{Obtención de datos: aspectos de diseño}
+ \begin{wideitemize}
+  \item Construir módulos intercambiables para manejar cada tipo de fuente.
+  \item Misma interfaz de uso, ocultando peculiaridades del manejo de cada
+  fuente o tipo de datos.
+  \item Considerar diseños basados en colas de elementos (datos o bloques de
+  datos de entrada) que permitan gestionar:
+  \begin{itemize}
+   \item Distintas velocidades de adquisición.
+   \item Datos heterogéneos.
+   \item Mantenimiento estricto del orden de llegada.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Obtención de datos: aspectos de diseño}
+ \begin{wideitemize}
+  \item Nunca debemos asumir que las fuentes nos van a enviar los datos
+  correctamente representados o íntegros.
+  \item Ejemplo: Beautiful Soup.
+  \begin{itemize}
+   \item Biblioteca Python para adquisición de datos HTML (y XML).
+   \item Soporta fallos en sintaxis HTML (o XML) de los documentos de origen.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Obtención de datos: aspectos de diseño}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+  \begin{wideitemize}
+  \item Aquí importa (y mucho) la velocidad de ejecución.
+  \begin{itemize}
+   \item En flujos de datos en tiempo real podemos perder datos si no los recuperamos
+   a tiempo.
+   \item Los tiempos de espera para tratamiento de fuentes de gran volumen se pueden 
+   alargar demasiado (días, semanas).
+  \end{itemize}
+
+  \item Ejemplos: lxml, UJSON (Python).
+  
+ \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{0.8cm}
+    \includegraphics[width=0.8\textwidth]{figs/cronometer.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Obtención de datos: aspectos de diseño}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+  \begin{wideitemize}
+  \item Pero también hay que respetar los límites impuestos por determiandos sistemas
+  fuente.
+  \begin{itemize}
+   \item En APIs públicas, se suele limitar el número de consultas que pueden realizarse
+   en un cierto intervalo, también la cantidad de datos devueltos por cada consulta o
+   el rango temporal que podemos abarcar.
+  \end{itemize}
+
+  \item Ejemplos: \href{https://dev.twitter.com/docs/rate-limiting/1.1}{Twitter REST API 1.1}, 
+  \href{https://developers.facebook.com/docs/reference/ads-api/api-rate-limiting/}{Facebook}.
+  
+ \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{0.8cm}
+    \includegraphics[width=0.8\textwidth]{figs/cronometer.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Representación de datos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Representación de datos}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+  \begin{wideitemize}
+  \item Formatos relacionados con tecnologías web.
+  \begin{itemize}
+   \item HTML, XML, JSON, YAML, etc.
+  \end{itemize}
+
+  \item Procesamiento.
+  \begin{itemize}
+   \item CSV, HDF5, ff, otros formatos específicos.
+  \end{itemize}
+  
+  \item Metadatos.
+  \begin{itemize}
+   \item RDF (datos enlazados).
+  \end{itemize}
+
+ \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{0.8cm}
+    \includegraphics[width=0.95\textwidth]{figs/binarydoc.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos}
+\begin{itemize}
+ \item Ejemplos [3]: JSON
+\end{itemize}
+
+ \begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/json-sample.jpeg} 
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos}
+\begin{itemize}
+ \item Ejemplos [3]: YAML
+\end{itemize}
+
+ \begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/yaml-sample.jpeg} 
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos}
+\begin{itemize}
+ \item Ejemplos [3]: XML
+\end{itemize}
+
+ \begin{figure}
+  \centering
+  \includegraphics[width=1\textwidth]{figs/xml-sample.jpeg} 
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos}
+\begin{wideitemize}
+ \item Benchmark bibliotecas serialización (Python) [4].
+\end{wideitemize}
+
+ \begin{figure}
+  \centering
+  \includegraphics[width=1\textwidth]{figs/benchmark-serial.pdf} 
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos: procesamiento}
+ \begin{wideitemize}
+  \item Almacenamiento de estructuras de datos de gran tamaño en disco.
+  
+  \item Estándares
+  \begin{itemize}
+   \item Hyerarchical Data Format version 5 (HDF5).
+  \end{itemize}
+  
+  \item Otros formatos específicos.
+  \begin{itemize}
+   \item Paquetes R \texttt{ff}, \texttt{ffbase} o \texttt{bigmemory}.
+  \end{itemize}
+
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos: HDF5}
+ \begin{wideitemize}
+  \item Conjunto de datos jerárquicos, estructurados y autodescriptivos (metadatos).
+  \item Capaz de escalar con facilidad al nivel de Exabyte (\textasciitilde1000 TB), compresión
+  transparente, ubicación en múltiples dispositivos.
+  \item Capacidad de indexación y E/S parcial.
+  \begin{itemize}
+   \item Evitamos cargar grandes volúmenes de datos en memoria o búsquedas secuenciales.
+  \end{itemize}
+  
+  \item Bibliotecas disponibles en C, C++, Python, MATLAB, etc. 
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos: HDF5}
+ \begin{wideitemize}
+  \item Recomendable cuando los datos sean [5]:
+  \begin{itemize}
+   \item Grandes arrays numéricos.
+   \item De tipo homogéneo.
+   \item Que se puedan organizar jerárquicamente.
+   \item Con metadatos de tipo arbitrario.
+  \end{itemize}
+  
+  \item Para gestión de relaciones entre datos mejor usar bases de datos.
+  \item Se puede usar también formatos más sencillos (e.g. CSV) para casos
+  simples.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos: otros formatos}
+ \begin{wideitemize}
+  \item Proyecto \texttt{ff} para el lenguaje R.
+  \item Permite manejar grandes volúmenes de datos en R, sin necesidad de recurrir
+  a clusters o cloud computing.
+  \item Implementación de estructuras de datos comunes en R (ej. data frames).
+  \item Implementación en C y C++ a bajo nivel, transparente para el usuario.
+  \item Soporte para aplicación paralela de operaciones sobre datos en disco.
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos: RDF}
+ \begin{wideitemize}
+  \item Resource Description Framework.
+  \item Familia de estándares de representación de metadatos promovida por W3C.
+  \item Tripletas (sujeto-predicado-objeto) definen grafos dirigidos.
+  \item Ofrecen información sobre ubicación y relaciones entre los datos almacenados
+  (recursos web enlazados).
+  \item Es posible consultar el grafo mediante el lenguaje \texttt{SPARQL}.
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Representación de datos}
+\begin{wideitemize}
+ \item Ejemplo grafo RDF.
+\end{wideitemize}
+
+ \begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/Rdf-graph-Eric-Miller.png} 
+\end{figure}
+
+\end{frame}
+
+%%---------------
