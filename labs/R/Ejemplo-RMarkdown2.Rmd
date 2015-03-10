@@ -1,0 +1,214 @@
+---
+title: "Ejemplo R Markdown v2"
+author: "Felipe Ortega"
+date: "03/03/2015"
+output: html_document
+bibliography: references.bib
+references:
+- id: fenner2012a
+  title: One-click science marketing
+  author:
+  - family: Fenner
+    given: Martin
+  container-title: Nature Materials
+  volume: 11
+  URL: 'http://dx.doi.org/10.1038/nmat3283'
+  DOI: 10.1038/nmat3283
+  issue: 4
+  publisher: Nature Publishing Group
+  page: 261-263
+  type: article-journal
+  issued:
+    year: 2012
+    month: 3
+---
+
+# Introducción
+Este es un documento generado mediante el lenguaje de marcado R Mardkown. Se trata
+de una versión de [Markdown](https://es.wikipedia.org/wiki/Markdown), un lenguaje de
+marcado ligero que se ha popularizado enormemente. R Markdown adapta este lenguaje
+de marcado para facitilar la inserción de código R, así como el producto de su
+ejecución (resultados numéricos, tablas, gráficos, etc.). De este modo, constituye
+un ejemplo de [programación literaria](http://www.literateprogramming.com/).
+
+La sintaxis de R Markdown permite utilizar un solo tipo de archivo fuente para generar
+múltiples formatos de salida: HTML, PDF o documentos MS Word. Se puede encontrar una
+descripción más detallada en <http://rmarkdown.rstudio.com>. Este documento describe
+R Markdown v2, la versión más actual hasta la fecha (marzo 2015).
+
+A partir de la versión 0.98 de RStudio, cuando creamos o editamos un documento R Markdwon
+la barra de herramientas del área de edición muestra un botón **Knit** que ofrece varias
+opciones, dependiendo del tipo de documento de salida que pretendamos generar.
+
+## Contenidos
+
+1. Instalación de R y RStudio (si fuese necesario).
+2. Introducir los elementos básicos de sintaxis (Markdown).
+3. Creación de *chunks* para insertar código en R, y opciones disponibles.
+4. Insertar elementos adicionales, tales como tablas o ecuaciones.
+5. Insertar referencias.
+
+# Instalación de R y RStudio
+
+Para trabajar con R Markdown, realizar los pasos que sean necesarios de la siguiente
+lista:
+
+* Instalar [R](http://www.r-project.org/)
+* Instalar la última versión de [RStudio](http://rstudio.org/download/) (actualmente
+0.98).
+* Instalar la versión más reciente del paquete R `knitr`: `install.packages("knitr")`
+
+A continuación, para crear un nuevo documento R Markdown realizar los siguientes pasos:
+
+* Abrir R Studio y pulsar **File** -> **New File** -> **R Markdown...**
+* Seleccionar el tipo de archivo (**Document**), rellenar los datos (opcional) y pular
+**OK**.
+* Escribir el contenido del documento según las normas de sintaxis establecidas en
+<http://rmarkdown.rstudio.com/authoring_basics.html>.
+* Pulsar **Knit HTML**. Si no hay errores, RStudio concluirá la construcción del fichero
+HTML a mostrar y abrirá un pequeño navegador integrado en el propio IDE para visualizar
+el resultado.
+
+Existe también un [esquema de referencia](http://rmarkdown.rstudio.com/RMarkdownCheatSheet.pdf) que resume los distintos pasos de este procedimiento.
+
+# Sintaxis para elementos básicos (Markdown)
+
+Como ya se ha indicado, Markdown permite la creación de elementos comunes en creación
+y edición de documentos (resaltado de fuente, listas, encabezados, etc.). Los detalles
+se pueden encontrar en <http://rmarkdown.rstudio.com/authoring_basics.html>.
+
+A veces, el lenguaje también soporta **directivas específicas** para determinados 
+formatos de documentos de salida (por ejemplo, directivas de LaTeX para generar un PDF). 
+Sin embargo, puede que estas directivas no funcionen para otros formatos de documentos.
+Por eso, es mejor intentar evitarlas salvo que estemos seguros de que únicamente
+generaremos ese tipo de archivo.
+
+Aunque está fuera del ámbito de este pequeño ejemplo, es importante resaltar que R Markdown v2 también integra métodos para generar **otros tipos de ficheros** de 
+presentación, además de documentos. Por ejemplo, existen plantillas para crear
+[presentaciones HTML 5](http://rmarkdown.rstudio.com/ioslides_presentation_format.html),
+que podremos visualizar directamente en cualquier navegador web moderno. 
+
+Igualmente, existe la opción de crear rápidamente **interfaces web interactivas**
+mediante [Shiny](http://shiny.rstudio.com/), utilizando la misma sintaxis de R 
+Markdown. Todas estas opciones hacen de R Markdown una herramienta muy versátil 
+para documentación de análisis de datos, facilitando su reproducción y edición.
+
+# Creación de *chunks* para código en R
+
+Podemos insertar trozos de código en R en nuestros documentos mediante la creación de
+*chunks*. Para ello, seleccionamos **Chunks** -> **Insert Chunk**. Esto produce:
+
+```{r  }
+
+```
+
+Existen múltiples opciones para modificar el comportamiento de un *chunk*. Podemos pulsar
+la tecla `Tab` dentro de las llaves (a continuación de `r`) para que aparezca un listado
+de todas las opciones. Algunas de las más relevantes son:
+
+* Nombrar un *chunk* (para hacer referencia en el documento y también para organizar
+mejor nuestro contenido):  
+`{r nombre_chunk}`
+* No mostrar la el código R de entrada en el documento:  
+`{r echo=FALSE}`
+* Mostrar el contenido del chunk directamente como código:  
+`{r echo=FALSE results='asis'}`
+* No ejecutar el código de R suministrado:  
+`{r eval=FALSE}`
+
+Algunos ejemplos:
+
+```{r basico}
+x <- 1:10
+y <- round(rbeta(10, x, 1), 2)
+df <- data.frame(x, y)
+df
+```
+
+```{r , results='asis', echo=FALSE}
+cat("Producimos salida desde el código de R, pero el código no se muestra...\n\n")
+cat(paste("* Valor de y[", 0:2, "] is ", y[0:2], sep="", collapse="\n"))
+```
+
+# Elementos adicionales
+
+## Figuras
+Insertar figuras es bastante sencillo:
+
+```{r fig}
+plot(x)  # Sin opciones
+```
+
+```{r smallfig, fig.width=3, fig.height=3}
+plot(x)  # Opciones chunk fig.width=3, fig.height=3
+```
+
+Por supuesto, también funcionan los paquetes de visualización más avanzados, como
+`lattice` o `ggplot2`.
+
+```{r ggplot2fig}
+library(ggplot2)
+set.seed(42) # Reproducible
+small<-diamonds[sample(nrow(diamonds),1000),]
+ggplot(small) + 
+  geom_point(aes(x=carat,y=price,colour=cut)) +  
+    scale_y_log10() + 
+      facet_wrap(~cut) + 
+        ggtitle("First example")
+```
+
+## Tablas
+
+A  | B | C
+--- | --- | ---
+1  | Male | 50
+2  | Female | 45
+
+## Ecuaciones
+
+Para insertar ecuaciones debemos utilizar la misma notación que se emplea en los
+documentos LaTeX. No es complicada, pero requiere una cierta curva de aprendizaje.
+
+Tenemos dos opciones. La primera es mostrar la ecuación en línea con el resto del
+contenido: $y_i = \alpha + \beta_0 x_0i + \beta_1 x_1i +  e_i$.
+
+La segunda opción es el modo *display* (muestra la ecuación de forma independiente,
+modificando la presentación de ciertos símbolos como sumatorios, integrales o
+fracciones).
+
+$$\lim_{x\to\infty}\frac{x}{x+1}$$
+
+$$\frac{1}{1+\exp(-3x+2)}$$
+
+**Importante**: Para ver correctamente las ecuaciones es necesario visualizar el
+documento HTML5 en un navegador externo, en lugar de usar el navegador integrado en
+RStudio. Esto se debe a que utiliza una biblioteca llamada Mathjax para renderizar las
+fórmulas. Por esta razón, también es imprescindible estar conectado a Internet (de
+forma que nuestro documento pueda cargar el script de Mathjax al renderizar la página
+en el navegador).
+
+## Imágenes
+
+![Pie de imagen](./avion.jpg)
+
+# Cómo insertar referencias
+
+Se pueden insertar enlaces internos (a otras partes del documento)[1] o también referencias bibliográficas[@fenner2012a]. En este caso, hemos insertado los datos de la entrada
+bibliográfica directamente en los metadatos del encabezado de nuestro documento (sección
+`references:`). Por supuesto, también podemos proporcionar un fichero externo con todas
+las referencias clasificadas en los formatos más comunes (BibTex, EndNote, etc.).
+
+**Importante**: La relación de referencias bibliográficas se insertará automáticamente al
+final de nuestro documento. Sin embargo, *no se añade automáticamente un encabezado*.
+Por eso, debemos recordar añadirlo nosotros al final del documento.
+
+# Recursos adicionales
+
+* http://rmarkdown.rstudio.com/
+* RPubs: servicio de [publicación de R Markdown](https://rpubs.com/) (RStudio).
+* Libro: Investigación reproducible con R y RStudio [@gandrud2013].
+
+### Notas
+[1] Este es un ejemplo de nota a pie de página.
+
+# Referencias
