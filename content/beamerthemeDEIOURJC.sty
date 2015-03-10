@@ -1,0 +1,237 @@
+%% el negocio de definir templates en beamer es complicado
+%% lo que sigue es un pequeño apaño 
+%% marco como AQUI los sitios donde he tocado cosas, indicando alguna opción cuando es posible
+%%% Defining the preamble
+\mode<presentation>
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{color}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%		Color theme
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Here we are defining only two colours. We are primarily only going to use the first one.
+% AQUI: toco el color de títulos y slides para intentar tener un color azul
+% si se quiere negro, usar {rgb}{0, 0, 0} 
+% \definecolor{Ftitle}{rgb}{0.2,0.2,0.90}% (rgb - 0, 0, 0) is nothing but black
+% \definecolor{Fbody}{rgb}{0.2,0.2,0.7}% negro {rgb}{0, 0, 0} % (rgb - 0, 0, 0) is nothing but black
+\definecolor{Ftitle}{rgb}{0,0,0}% (rgb - 0, 0, 0) is nothing but black
+\definecolor{Fbody}{rgb}{0,0,0}
+% Here, we are using "rgb" in small case and this notation for decimal values of "rgb" ranging from 0 to 1
+
+% NO TOCO LO QUE SIGUE PUES NO VOY A USARLO
+% To specify the integer values of "RGB", ranging from 0 t0 255, we need to use the "RGB" in CAPS or UPPERCASE 
+\definecolor{Descitem}{RGB}{51,51,210}% warsaw blue {0, 0, 139} % Darkish blue
+% \definecolor{Descitem}{RGB}{0,0,0}
+
+% \definecolor{StdTitle}{RGB}{26, 33, 141}
+% \definecolor{StdBody}{RGB}{213,24,0}
+% 
+% \definecolor{AlTitle}{RGB}{255, 190, 190}
+% \definecolor{AlBody}{RGB}{213,24,0}
+% 
+% \definecolor{ExTitle}{RGB}{201, 217, 217}
+% \definecolor{ExBody}{RGB}{213,24,0}
+
+\definecolor{StdTitle}{RGB}{0, 0, 0}
+\definecolor{StdBody}{RGB}{0,0,0}
+
+\definecolor{AlTitle}{RGB}{0, 0, 0}
+\definecolor{AlBody}{RGB}{0,0,0}
+
+\definecolor{ExTitle}{RGB}{0, 0, 0}
+\definecolor{ExBody}{RGB}{0,0,0}
+
+
+% Another color for the background canvas using the blending option
+%\definecolor{BgShade}{red!30!white}
+%%% Important note: While trying this, I found out that a colour cannot be defined this way, it can only be set or called for a particular feature using the \setbeamercolor{}{} command. We will use this below to show this.
+
+%%%%%%
+% Assign colours to different constitutens of the presentation as per the requriements.
+%%%%%%
+
+% This sets the colour of the title of the presentation and titles of all the slides in the presentation to black.
+\setbeamercolor{frametitle}{fg = Ftitle}
+\setbeamercolor{title}{fg = Ftitle}
+
+% In case you choose to display the Table of Contents, or the Outline slide.
+\setbeamercolor{section in toc}{fg = Ftitle}
+\setbeamercolor{section in toc shaded}{fg = Ftitle} 
+
+% The colour of all the items, subitems and and subsubitems are set to black.
+\setbeamercolor{item}{fg = Descitem}
+\setbeamercolor{subitem}{fg = Ftitle}
+\setbeamercolor{subsubitem}{fg = Ftitle}
+
+% This sets the color for each item heading of the description environment.
+\setbeamercolor{description item}{fg = Descitem}
+
+% NOTE: Setting the color black for all the items also sets in black for other environemnts like enumerate.
+
+% We also need to fix the colours for captions for figures and tables.
+\setbeamercolor{caption}{fg = Ftitle}
+\setbeamercolor{caption name}{fg = Ftitle}
+
+% In addition, we can also change the background colour of the slides depending on pur requirement.
+% \setbeamercolor{background canvas}{bg = blue!5}
+% We have commented out this command because this is just for illustrative purposes and has not been used to define the background colour of the slides.
+
+%%%%%%
+% Now, there are three types of boxes in beamer: 
+% 		1. Simple, or standard block, which can be invoked using definition or theorem
+%		2. Alert block
+%		3. Example block 
+% We will customize all these blocks based on our requirements
+
+% NO USO blocks; SI SE VAN A USAR HAY QUE TOCAR LAS DEFINICIONES DE COLORES DE ARRIBA
+% Standard block
+%\setbeamercolor{block body}{bg = StdLight}
+%\setbeamercolor{block title}{fg = black, bg = Std}
+
+\setbeamercolor{block title}{fg = Descitem, bg = StdTitle!15!white}
+\setbeamercolor{block body}{bg = StdBody!5!white}
+
+% Alert block
+\setbeamercolor{block title alerted}{bg = AlTitle}
+\setbeamercolor{block body alerted}{bg = AlBody!5!white}
+
+% Example block
+\setbeamercolor{block title example}{bg = ExTitle}
+\setbeamercolor{block body example}{bg = ExBody!5!white}
+
+
+%%%%%%
+% And one final thing, the colour of the text
+\setbeamercolor{normal text}{fg = Fbody}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%		Font theme
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% AQUI: ESCOGER EL TIPO DE FONT QUE MAS NOS GUSTE
+%\usefonttheme{serif} 
+\usefonttheme{default} 
+%\usefonttheme{professionalfonts}         % Here we are using default fonts
+\setbeamerfont{title}{size = \huge}       % Font for the presentation title
+\setbeamerfont{frametitle}{size = \Large} % Font of the frame titles
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%		Inner theme
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Here we am using the rounded theme for the overall "feel" of the presentation. You can change the specific details by editing that particular option as we have done below.
+\useinnertheme{rounded}
+
+% Instead of rounded circles, we will use triangles as the indicator for items.
+%\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{itemize items}[ball] %AQUI: PREFIERO balls
+
+% The default option for enumerate environment removes the circles around the numbers provided by the "rounded" inner theme. Just simple numbers remain.
+\setbeamertemplate{enumerate items}[default]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%		Outer theme
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%
+% The outer theme takes the most amount of effort and time to customize. 
+
+%%%%%%
+% In the outer theme, we will try to do the following:
+%	1. Change the headline by putting a logo and a horizontal line
+%	2. Change the footline and include custom information depending on our requirements
+%	3. Organize the presentation title and the frame titles
+
+%%%%%%
+% Let's start with the headline. The approach that we plan to take for the headline and footline is similar.
+% We will first define a new command and then include the command in the \setbeamertemplate{} option. 
+% I tried a couple of approaches that would make the method more simple but could not come up with one. In case you do find a more aesthetic approach, please do send it accross. The contact information is on the top of the page.
+
+% First the horizontal line on the top portion of the slides
+% Add a horizontal line that runs from left of the slide to the right, just below the logo.  
+% AQUI 
+\newcommand{\LogoLine}{%
+  \raisebox{-12mm}[0pt][0pt]{%
+   	\begin{pgfpicture}{0mm}{0mm}{0mm}{0mm}
+    	 \pgfsetlinewidth{0.28mm}
+    	  \color{gray}
+      	\pgfline{\pgfpoint{-3mm}{1mm}}{\pgfpoint{10.8cm}{1mm}}
+    \end{pgfpicture}
+  }
+}
+% 
+% % Include the line that we just created in the headline
+\setbeamertemplate{headline}[text line]{\LogoLine}
+
+% Now that we have changed the headline, we will need to orient the frame titles in a way that the come at the right stop just above the horizontal line.
+\setbeamertemplate{frametitle}{
+\vspace*{4mm}\hspace*{-2mm}\insertframetitle}
+
+% Like mentioned above, we will take a similar approach to customize the footline as well and inclued FAA in it.
+% AQUI: PONGO EL LOGO DE LA ACADEMIA A LA IZQ, EL DE LA URJC A LA DCHA Y EN MEDIO TITULO + SPEAKER + NUM PAGINAS
+\newcommand{\Ffootline}{%
+  	%\insertsection % The left end of the footline
+% 	\includegraphics[width=0.15\textwidth]{logo_raing.jpg}
+%   \hfill
+	%\textit{\insertauthor} % The center
+% 	\textit{Big Data I: Ingenier\'{i}a de datos. Felipe Ortega, Javier M. Moguerza (URJC)} % The center
+	\textit{Big Data I: Ingenier\'{i}a de datos. Felipe Ortega} % The center
+  \hfill
+  	\insertframenumber/\inserttotalframenumber%} % And the right end
+  \hfill
+	\includegraphics[width=0.1\textwidth]{logo_urjc.jpg}
+}
+
+\setbeamertemplate{footline}{%
+  \usebeamerfont{structure}
+  	\begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{title in head/foot}%
+    	\Tiny\hspace*{4mm} \Ffootline \hspace{4mm}
+  	\end{beamercolorbox}}
+  	
+% We will also remove the navigation symbols, which I personally don't find very useful
+% HAY QUE TOCAR LA ORDEN \titlepage CUANDO SE GENERA TRAS \begin{document}
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{title page}{
+	\begin{center}
+	\vspace*{0.8cm}	
+	{\Large \textbf{\inserttitle}} \\
+	\vspace*{0.5cm}	
+	\insertauthor \\
+	\vspace*{0.2cm}
+	{\footnotesize \textit{\insertinstitute}} \\
+	\vspace*{0.2cm}
+	{\footnotesize \insertdate} \\
+	\vspace*{0.8cm}
+	
+	\begin{figure}[ht]
+% 	\begin{minipage}[b]{0.45\linewidth}
+% 	\centering
+% 	\includegraphics[width=0.49\textwidth]{logo_raing.jpg}
+% 	\end{minipage}
+% 	\hspace*{0.4cm}
+	\begin{minipage}[b]{0.55\linewidth}
+	\centering	
+	\includegraphics[width=0.55\textwidth]{logo_urjc.jpg}
+	\end{minipage}
+	\end{figure}
+	
+	\end{center}
+}
+
+
+
+\mode
+<all>  	  
