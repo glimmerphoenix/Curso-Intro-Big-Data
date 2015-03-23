@@ -1,0 +1,272 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Almacenamiento de datos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Modelo de datos}
+ \begin{wideitemize}
+  \item Define el diseño y la implementación del sistema que almacena y gestiona
+  los datos.
+  \item Datos estructurados.
+  \begin{itemize}
+   \item Podemos almacenar sus valores en campos predefinidos con un tipo o
+   una clase asociado de forma fija.
+   \item Ejemplo: sistemas de bases de datos relacionales (RDBMS).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Modelo de datos}
+ \begin{wideitemize}
+  \item Datos no estructurados
+  \item No podemos predefinir de antemano su tipo, por lo que necesitamos un modelo
+  de datos más flexible para su gestión.
+  \item Relaciones complejas entre los diferentes elementos de datos.
+  \item Ejemplo: Sistemas NoSQL (particionado por columnas, documentos, grafos,
+  clave-valor, etc.).
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Bases de datos relacionales}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+    \begin{wideitemize}
+    \item Numerosas opciones en el mercado, propietarias o software libre.
+    \item Larga trayectoria, tecnología muy madura y consolidada, permite predecir
+    hasta cierto punto rendimientos esperados.
+    \begin{itemize}
+    \item Oracle, MySQL, MariaDB, PostgreSQL, SQLite, etc.
+    \end{itemize}
+    \item Gran variabilidad en cuanto a soporte para big data.
+    \begin{itemize}
+    \item Tipos de datos nativos.
+    \item Particionado de tablas.
+    \item Clustering, alta disponibilidad.
+    \end{itemize}
+
+    \item Object-Relational Mapping (ORM).
+    \begin{itemize}
+    \item Ejemplo: \href{http://www.sqlalchemy.org/}{SQLAlchemy} (Python).
+    \end{itemize}
+
+  \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{1.5cm}
+    \includegraphics[width=0.8\textwidth]{figs/db.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Rendimiento RDBMS}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+    \begin{wideitemize}
+    \item Es conveniente tener en cuenta algunas premisas importantes para
+    analizar datos utilizando RDBMS.
+    
+    \item Utilizar motores \textit{ACID-compliant} únicamente cuando sea
+    imprescindible.
+    \begin{itemize}
+     \item Si estamos trabajando con datos localmente, a los que solo accede uno o
+     varios analistas, podemos usar otras opciones más rápidas.
+     
+     \item Ejemplos: MyISAM (MySQL), ARIA (MariaDB).
+     
+    \end{itemize}
+    
+  \item Desactivar claves primarias/foráneas en carga de datos. Después, utilizar
+     solo cuando sea imprescindible.
+     
+  \item Activar particionado de tablas en diferentes ficheros (e.g. InnoDB).
+  
+  \item Cuidado con la codificación (asegurar UTF-8 siempre que sea posible).
+
+  \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{1.5cm}
+    \includegraphics[width=0.8\textwidth]{figs/db.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Rendimiento RDBMS}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+    \begin{wideitemize}
+    \item La configuración por defecto de cualquier servidor de base de datos
+    relacional no suele ser adecuada para el análisis de datos.
+    
+    \begin{itemize}
+     \item Incrementar tamaño de los ficheros de claves (búsquedas, ordenación).
+     
+     \item Configurar adecuadamente el sistema de logging (errores, consultas
+     lentas, etc.) ya que puede consumir rápidamente espacio en disco.
+     
+    \end{itemize}
+
+   \item Formular las consultas basándonos siempre en conjuntos de datos y operaciones
+   sobre los mismos (\texttt{JOIN}, \texttt{LEFT JOIN}, etc.).
+   
+   \begin{itemize}
+    \item Evitar en lo posible cláusulas del tipo \texttt{WHERE X IN (...)}, ya
+    que suelen involucrar búcles de búsqueda lentos.
+   \end{itemize}
+
+   \item Usar R y Python a partir de la fase de preparación
+   y transformación.
+   
+  \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{1.5cm}
+    \includegraphics[width=0.8\textwidth]{figs/db.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{NoSQL}
+ \begin{wideitemize}
+  \item NoSQL = Not Only SQL.
+  \item Escalabilidad y alto rendimiento para big data (en especial, tratamiento
+  de tipos de datos muy heterogéneos o información textual).
+  \item \textbf{Esquemas clave-valor}.
+  \begin{itemize}
+   \item Almacen de datos en pares clave-valor, no precisan esquema (Riak, Redis,
+   Voldemort, etc.).
+  \end{itemize}
+
+  \item \textbf{Almacen de columnas}.
+  \begin{itemize}
+   \item Particionan datos por columnas, de forma que podemos paralelizar consultas
+   sobre subconjuntos de datos muy grandes (HBase, Cassandra).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Almacenamiento de datos: NoSQL}
+ \begin{wideitemize}
+  \item \textbf{Orientadas a documentos}.
+  \begin{itemize}
+   \item Cada clave está asociada a un documento, codificado según algún estándar
+   de representación de datos (JSON, XML, YAML, etc.). 
+   \item Los documentos pueden contener
+   muchos pares clave-valor, clave-array (para listas de datos) u otros documentos.
+   \item Ejemplo: MongoDB.
+  \end{itemize}
+
+  \item \textbf{Grafos}.
+  \begin{itemize}
+   \item Almacenan explícitamente información sobre nodos y sus relaciones, optimizando
+   consultas que recorren los grafos (Neo4J).
+   
+   \item A cambio, tenemos que aprender un lenguaje de consultas muy diferente.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ventajas NoSQL}
+ \begin{wideitemize}
+  \item Mejor escalado horizontal, permite procesamiento paralelo.
+  \begin{itemize}
+   \item Consideran la agregación de nuevos recursos de computación ``en caliente''
+   (autosharding, replicación).
+  \end{itemize}
+
+  \item No es necesario definir esquemas (tipos de datos), se pueden mezclar dinámicamente
+  nuevos datos con los ya existentes (con limitaciones).
+  
+  \item Mejor integración con metodologías ágiles de desarrollo de software.
+  \begin{itemize}
+   \item Sprints cortos, prototipado rápido (vs. esquemas predefinidos).
+   \item Dificultad para establecer a priori esquemas fijos de estructuras de datos.
+  \end{itemize}
+
+  \item Posibilidad de optimizar la recuperación de información mediante indexación
+  (múltiple, dispersa, geoespacial, etc.).
+  
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Inconvenientes NoSQL}
+ \begin{wideitemize}
+  \item Requieren importantes conocimentos técnicos para su instalación, correcta
+  configuración y administración (recordemos importancia del rendimiento).
+  \item Todavía escasa madurez en comparación con RDBMS.
+  \item Múltiples estándares de programación y APIs, incompatibles entre sí en
+  muchos casos (necesidad de soporte de comunicación).
+  \item Problema sistemas distribuidos: teorema CAP (\textit{consistencia}, \textit{disponibilidad},
+  \textit{particionado}).
+  
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ejemplo: Redis}
+ \begin{wideitemize}
+  \item Redis es un buen ejemplo de sistema de almacenamiento de datos NoSQL.
+  
+  \item Tremendamente popular, puesto que ofrece un buen rendimiento tanto con
+  datos en memoria como con datos en disco.
+  
+  \item Buen enlace con Python: \textit{redis-py}
+  \begin{itemize}
+   \item \texttt{sudo pip install redis}
+  \end{itemize}
+
+  \item Ejemplo de programación con Python y Redis (Python notebook).
+  
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Sistemas de ficheros distribuidos}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Adecuados para distribuir datos sobre clústers de máquinas/clouds.
+      \item Fuertemente ligados a tecnologías específicas.
+      \item HDFS (Apache Hadoop).
+      \item Google File System (GFS).
+      \item Amazon S3.
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1.5cm}
+    \includegraphics[width=1.2\textwidth]{figs/cloud.png}
+    \end{column}
+  \end{columns}
+ 
+\end{frame}
