@@ -1,0 +1,297 @@
+---
+title: 'ØMQ'
+subtitle: 'Comunicación asíncrona de alto rendimiento'
+author: "Felipe Ortega - URJC"
+date: "25/03/2015"
+output:
+  ioslides_presentation:
+    keep_md: yes
+    logo: figs/cornues.png
+    widescreen: yes
+    css: styles.css
+---
+# Introducción
+
+## El problema
+<div class="quote-container">
+
+> Connect your code in any language on any platform
+> </br>
+> <cite>Pieter Hintjens, ØMQ lead maintainer.</cite>
+
+</div>
+
+- Conectar código (en **cualquier lenguaje**) con otro código (en **cualquier lenguaje**), sobre cualquier plataforma y en cualquier lugar.
+- Implementar una solución con **componentes sencillos**, fácil de utilizar.
+- Comunicación **asíncrona** y de **alta velocidad**.
+
+## ØMQ (a.k.a. ZeroMQ, ZMQ)
+- __Entorno de concurrencia__ (pero parece biblioteca de comunicación por red).
+- **Mensajes atómicos**, varios **modos de transporte** (proceso, entre procesos, TCP, multicast).
+- Basado en **sockets**, conexión N a N.
+- **Patrones**: fan-out, pub-sub, req-rep, router, etc.
+- **Muy rápido** (concebido originalmente para negociación bursátil).
+- E/S **asíncrona** (escalabilidad).
+- APIs en **más de 30 lenguajes** de programación.
+- Software libre (LGPLv3).
+
+## Algunos usuarios
+
+- AT&T.
+- Cisco.
+- EA.
+- NASA, CERN.
+- Zynga.
+- Spotify.
+- Microsoft.
+
+## Aspectos básicos
+
+- Minimalismo:
+    + "Zero broker".
+    + "Zero administration".
+    + "Zero cost".
+    + "Zero waste".
+
+Entremos en materia...
+
+# Mensajería en 3 pasos
+
+## Sistema de mensajería con ØMQ
+1. Elegimos un protocolo (modo) de **transporte**.
+2. Escoger componentes de la **infraestructura**.
+3. Definir un **esquema** de comunicación.
+
+## Modos de transporte
+1. Comunicación en el proceso (*in-process communication*).
+    ```{r, engine='python', eval=FALSE}
+    inproc://#1
+    inproc://my-endpoint
+    ```
+2. Comunicación entre procesos (*IPC*).
+    ```{r, engine='python', eval=FALSE}
+    ipc:///tmp/feeds/0
+    ```
+3. Protocolos de red: TCP o IP Multicast (PGM o EPGM).
+    ```{r, engine='python', eval=FALSE}
+    tcp://127.0.0.1:30000
+    pgm://192.168.1.1;239.192.1.1:5555
+    ```
+
+## Componentes
+<div class="centered">
+  ![Patrón REQ/REP](figs/zmq-components.png)
+</div>
+
+## Esquemas de comunicación
+- Resueltos mediante **patrones de diseño**.
+    + Request/Response (cliente-servidor).
+    + Publish/Subscribe.
+    + Pipelining (transferencia de datos).
+    + Exclusive pair (1:1).
+- **Devices** (conexión agentes dinámicos).
+<div class="centered">
+  <br/>
+  ![Patrón REQ/REP](figs/zmq-device.png)
+</div>
+
+# Hello world (cliente-servidor)
+
+## Hello world: server
+```{r, engine='python', eval=FALSE}
+# Hello World server in Python
+# Connects REQ socket to tcp://localhost:30000
+# Sends "Hello" to server, expects "World" back
+#
+# Import python bindings (pyzmq)
+import zmq
+# Get context (only once!)
+context = zmq.Context()
+socket_rep = context.socket(zmq.REP)
+# Server is bound to a port
+socket_rep.bind("tcp://127.0.0.1:30000")
+# Using built-in JSON serialization (pyzmq)
+message = channel_rep.recv_json()
+print "Received message: %s" % message
+print 'Sending "world"'
+socket_rep.send_json("world")
+```
+
+## Hello world: client
+```{r, engine='python', eval=FALSE}
+# Hello World client in Python
+# Connects REQ socket to tcp://localhost:30000
+# Sends "Hello" to server, expects "World" back
+#
+# Import python bindings (pyzmq)
+import zmq
+# Get context (only once!)
+context = zmq.Context()
+socket_req = context.socket(zmq.REQ)
+# Client connects to port
+socket_req.connect("tcp://127.0.0.1:30000")
+# Using built-in JSON serialization (pyzmq)
+socket_req.send_json("Hello")
+print "This is a blocking call..."
+message = socket_req.recv_json()
+print "Received message: %s" % message
+```
+
+# Patrones de diseño
+
+## Request-Reply
+<div class="centered">
+  ![Patrón REQ/REP](figs/req-rep.png)
+</div>
+
+## Request-Reply (reparto de carga)
+- `class zmq.devices.Proxy(in_type, out_type, mon_type=1)`
+<div class="centered">
+<br/>
+  ![Patrón REQ/REP Avanzado](figs/req-rep-advanced.png)
+</div>
+
+## Publisher-Subscriber {.smaller}
+<div class="columns-2">
+  ![Patrón PUB/SUB](figs/pub-sub.png)
+<br/>
+<br/>
+<br/>
+<br/>
+
+```{r, engine='python', eval=FALSE}
+# Publisher
+import zmq
+from random import choice
+context = zmq.Context()
+socket = context.socket(zmq.PUB)
+socket.bind("tcp://127.0.0.1:30000")
+teams = ['ATL','BAR','MAD','VAL']
+events = ['YCAR', 'RCARD', 'GOAL',
+          'CORNER', 'FOUL', 'PENALTY']
+while True:
+    msg = "%s %s".format(choice(countries),
+                         choice(events)) 
+    print "Published: ",msg
+    socket.send(msg)
+# Subscribers
+import zmq 
+context = zmq.Context()
+socket = context.socket(zmq.SUB)
+socket.connect("tcp://127.0.0.1:30000")
+socket.setsockopt(zmq.SUBSCRIBE, "BAR")
+socket.setsockopt(zmq.SUBSCRIBE, "ATL") 
+while True:
+    print  socket.recv()
+```
+</div>
+
+## Pipelining {.smaller}
+<div class="columns-2">
+  ![Patrón PUSH/PULL](figs/push-pull.png)
+<br/>
+<br/>
+
+```{r, engine='python', eval=FALSE}
+# Ventilator
+import zmq
+context = zmq.Context()
+socket = context.socket(zmq.PUSH)
+socket.bind("tcp://127.0.0.1:30000")
+while True:
+      socket.send(data_chunk)
+# Worker
+import zmq
+context = zmq.Context()
+socket_up = context.socket(zmq.PULL)
+socket_down = context.socket(zmq.PUSH)
+socket_up.connect("tcp://127.0.0.1:30000")
+socket_down.connect("tcp://127.0.0.1:30001")
+while True:
+    data_chunk = socket_up.recv()
+    # Proces data chunk --> data result
+    socket_down.send(data_result)
+# Sink
+import zmq
+context = zmq.Context()
+socket = context.socket(zmq.PULL)
+socket.bind("tcp://127.0.0.1:30001")
+while True:
+      data_result = socket.recv()
+```
+</div>
+
+## Exclusive-pair {.smaller}
+<div class="columns-2">
+![Patrón PAIR](figs/pair.png)
+<br/>
+    
+```{r, engine='python', eval=FALSE}
+# Peer 0 (Parent process)
+import zmq
+context = zmq.Context()
+socket = context.socket(zmq.PAIR)
+socket.bind("ipc:///tmp/pipes/zmq0")
+# Do something else, wait for child process
+socket.recv() # Blocking
+print("Test successful!")
+#
+# Peer 1 (Child process)
+import zmq
+context = zmq.Context()
+socket = context.socket(zmq.PAIR)
+socket.connect("ipc:///tmp/pipes/zmq0")
+# Do something, eventually warn parent process
+sender.send(b"")
+```
+</div>
+
+## Serialización
+- Serialización en `pyzmq`.
+    + `send_json() # With json module`
+    + `send_pyobj() # With pickle module`
+- Ejemplo de personalización:
+```{r, engine='python', eval=FALSE}
+import ujson, zlib
+def send_ujson(socket, obj, flags=0):
+    """Serialize object using ultra-fast ujson"""
+    m = ujson.dumps(obj), z = zlib.compress(m)
+    return socket.send(z, flags=flags)
+
+def recv_ujson(socket, flags=0):
+    """Load object from ujson serialization"""
+    z = socket.recv(flags), m = zlib.decompress(z)
+    return ujson.loads(m)
+```
+
+## Características adicionales
+- Muchos **más patrones** de diseño.
+    + Balanceo de carga en clusters.
+    + Pipelining con control de cierre.
+    + Pub/sub de alta disponibilidad.
+    + etc.
+    
+- Desde la versión 4.0.0, se incluye **framework de seguridad**.
+    + NULL.
+    + PLAIN.
+    + CURVE.
+
+## Referencias
+- ØMQ. Code connected (project page). <http://zeromq.org/>.
+    + Learn the basics <http://zeromq.org/intro:read-the-manual>.
+    + The guide <http://zguide.zeromq.org/page:all>.
+    + Pieter Hintjens. *ZeroMQ. Messaging for Many Applications*. O'Reilly Media.
+    March 2013.
+- Nicolas Piël. *ZeroMQ: An introduction*. <http://nichol.as/zeromq-an-introduction>.
+- Pyzqm (documentation). <http://zeromq.github.io/pyzmq/>.
+    
+## Contacto
+<div class="columns-2">
+- **Felipe Ortega**.
+    + Dpto. Informática y Estadística, Universidad Rey Juan Carlos.
+    + E-mail: felipe.ortega@urjc.es
+    + Twitter: @jfelipe
+    + Web: <http://felipeortega.net>
+
+![Logo](figs/cornues.png)
+</div>    
