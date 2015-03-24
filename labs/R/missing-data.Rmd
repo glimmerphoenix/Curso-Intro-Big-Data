@@ -1,0 +1,162 @@
+---
+title: "Ejemplo-Missing-Data"
+author: "Felipe Ortega"
+date: "23/03/2015"
+output: 
+  html_document:
+    fig_caption: true
+---
+
+# Introducción
+
+Uno de los aspectos más importantes a la hora de trabajar con grandes volúmenes de datos
+es el tratamiento de datos incompletos o incorrectos. A veces, la omisión de datos
+importantes o la inclusión de valores erróneos en nuestros cálculos pueden dar al traste
+con los esfuerzos invertidos en nuestro análisis.
+
+Una de las formas más evidentes para comprobar la existencia de datos erróneos o casos
+incompletos es inspeccionar la salida del comando `summary()` en R.
+
+```{r}
+summary(airquality)
+```
+
+Como podemos observar, algunas de las entradas contienen valores incompletos (*NA*), en
+particular para las variables `Ozone` (37 casos) y `Solar.R` (7 casos). Esto provoca
+algunos problemas, por ejemplo a la hora de realizar cálculos o crear modelos.
+
+Si, por ejemplo, queremos calcular los coeficientes de correlación entre los distintos
+pares de variables de este conjunto obtendremos errores en aquellos casos que involucren
+variables con valores perdidos:
+
+```{r}
+cor(airquality)
+```
+
+Una posible solución es eliminar aquellos casos con valores omitidos:
+
+```{r}
+cor(airquality, use="complete.obs")
+```
+
+Otra opción es eliminar los casos con valores omitidos solo para los calculos de con las
+variables afectadas, pero utilizar todos los casos para las demás variables que sí que
+están completas:
+
+```{r}
+cor(airquality, use="pairwise.complete.obs")
+```
+
+También ocurre en el caso de la creación de modelos. Por ejemplo, cuando efectuamos
+una regresión lineal para establecer cómo se ve afectada la temperatura recogida en la
+variable `Temp` en función de `Ozone` y `Solar.R`:
+
+```{r}
+lmodel = lm(Temp ~ Ozone + Solar.R, data=airquality)
+summary(lmodel)
+length(airquality$Ozone)
+length(lmodel$fitted)
+```
+
+# Visualización de valores perdidos/omitidos
+
+Los paquetes `Amelia`, `mice` y `VIM` (Visualization and Imputation of Missing Values) pueden resultar muy útiles para estas labores.
+
+```{r}
+suppressMessages(library(mice))
+suppressMessages(library(VIM))
+# Obtener patrón de valors NAs
+md.pattern(airquality)
+```
+
+# Visualización de patrones de aparición de NAs
+```{r}
+# Visualización de casos con NAs
+aggr(airquality, prop = F, numbers = T)
+```
+
+# Asignación múltiple de valores ausentes
+Existen diferentes técnicas que permiten asignar valores a los casos con datos omitidos
+de forma que los resultados que ofrezcan nuestros modelos se vean perjudicados en la menor
+medida posible. Estas técnicas reciben el nombre de *multiple imputation* en inglés.
+
+La discusión en detalle de estos procedimientos queda fuera del alcance de este
+laboratorio, pero aquellos interesados en ampliar más información pueden consultar las
+referencias [1, 2, 3].
+
+# Exploración y transformación de datos
+
+Un paso esencial previo a la realización de cualquier análisis de datos consiste en
+inspeccionar mediante técnicas de visualización y exploración el aspecto que tienen
+nuestros datos, en busca de patrones poco habituales, casos fuera de lo corriente, y
+cualquier otro fenómeno que pueda influir en los resultados de nuestro análisis posterior.
+
+Para este paso nos vamos a ayudar de las funciones proporcionadas por el paquete `car` en
+R [4].
+
+## Scatterplot
+```{r}
+library(car)
+scatterplot(Temp ~ Ozone, data=airquality, id.n=2)
+```
+
+## Diagrama de correlaciones (scatterplot matrix)
+```{r}
+scatterplotMatrix(~ Ozone + Solar.R + Wind + Temp, data=airquality, span=0.6)
+```
+
+## Transformación de variables
+Existen múltiples alternativas de transformación de variables, incluyendo logaritmos,
+potencias, inversas y familias de transformaciones, tales como Box-Cox o Yeo-Johnson [4].
+
+De todas ellas, el logaritmo (natural o decimal) es una de las más usuales.
+
+```{r}
+par(mfrow=c(1, 2))
+plot(density(UN$gdp, na.rm=T), xlab="GDP", main="Sin transformar")
+plot(density(log10(UN$gdp), na.rm=T), data=airquality, xlab="GDP", main="log10(UN$gdp)")
+```
+
+```{r}
+qqPlot(log10(UN$gdp), distribution="norm")
+```
+
+# *Wide format* vs. *long format*
+
+Otra tarea muy común en preparación de datos para posteriores análisis es la de
+descubrir si el modelo o herramienta que pretendemos usar necesita leer los datos
+en formato *wide* (una fila por caso y varias columnas con los valores de cada
+parámetro para ese caso) o *long* (varias filas por caso, y una variable categórica
+que indica a qué parámetro pertenece el valor indicado).
+
+Las bibliotecas de R `tidyr` y `reshape2` pueden resultar útiles para transformar
+nuestros datos entre estos dos formatos. Veamos un ejemplo [5]:
+
+```{r}
+library(tidyr)
+# De wide format a long format: gather()
+airquality_long = gather(airquality, variable, measurement, Ozone:Temp)
+# Equivalmente, pero más fácil, que la siguiente instrucción
+# airquality_long <- melt(airquality, id.vars = c("Month", "Day"))
+head(airquality_long)
+tail(airquality_long)
+```
+
+```{r}
+# De long format a wide format: spread()
+airquality_wide = spread(airquality_long, variable, measurement)
+head(airquality_wide)
+tail(airquality_wide)
+```
+
+Existe una hoja de referencia para operaciones de transformación y limpieza de datos
+disponible en R con `tidyr` y `dplyr` [6].
+
+# Referencias
+1. *Advanced Methods for missing data*. R in Action. <http://rstudio-pubs-static.s3.amazonaws.com/4625_fa990d611f024ea69e7e2b10dd228fe7.html>.
+2. Faraway. J. *Linear Models with R*. 2nd Ed. CRC Press, 2014.
+3. Harrell, Frank E. *Regression modeling strategies*. Springer Science & Business Media, 2001.
+4. Fox, J. and Weisberg, S. An R companion to Applied Regression. 2nd Ed. Sage
+Publications, 2011.
+5. <http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/>
+6. <http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf>
