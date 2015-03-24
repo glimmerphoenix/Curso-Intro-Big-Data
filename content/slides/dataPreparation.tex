@@ -1,0 +1,183 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preparación y transformación de datos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Preparación y transformación de datos}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Limpieza de datos.
+      \item Datos no disponibles.
+      \begin{itemize}
+      \item Gestión de valores vacíos.
+      \item Imputación de datos no disponibles.
+      \end{itemize}
+
+      \item Transformación de datos.
+      \begin{itemize}
+      \item \textit{Data munging} o \textit{data wrangling}.
+      \item Pasar los datos a otro formato o dejarlos preparados para luego poder 
+      analizarlos más fácilmente.
+      \end{itemize}
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1cm}
+    \includegraphics[width=1.2\textwidth]{figs/liftarn-Cleaning-tools.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Data Wrangler}
+\begin{itemize}
+ \item Ejemplo de este tipo de herramientas (UW Interactive Data Lab).
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{figs/data-wrangler.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Preparación de datos}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item En primer lugar, debemos comprobar que no existen valores extraños
+      ni datos omitidos.
+      
+      \begin{itemize}
+       \item Utilizar técnicas básicas de resumen de datos.
+       \item Técnicas de visualización de datos omitidos.
+      \end{itemize}
+      
+      \item Después, tenemos dos opciones:
+      \begin{itemize}
+       \item Descartar los casos que contengan variables con datos omitidos.
+       \item Imputar valores para los datos que faltan, utilizando técnicas
+       avanzadas de imputación de múltiples valores.
+      \end{itemize}
+
+    \end{wideitemize}
+    
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1cm}
+    \includegraphics[width=1.2\textwidth]{figs/liftarn-Cleaning-tools.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Transformación de datos}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Otro paso crucial antes de comenzar nuestro análisis es comprobar
+      la distribución de valores de los parámetros implicados.
+      
+      \begin{itemize}
+       \item Muchas técnicas y modelos asumen que los datos siguen una cierta
+       distribución (e.g. Normal), pero puede no ser cierto.
+       
+       \item De hecho, en la práctica nos encontramos muchas veces con distribuciones
+       sesgadas (\textit{skewed distributions}) o con diferentes apuntamientos
+       (\textit{kurtosis}).
+      \end{itemize}
+      
+    \item Posibles objetivos:
+    \begin{itemize}
+     \item Reducir la asimetría de la distribución de valores.
+     
+     \item Transformar una o varias variables de forma que se parezcan más a una
+     distribución Normal (univariante o multivariante).
+    \end{itemize}
+
+    \end{wideitemize}
+    
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1cm}
+    \includegraphics[width=1\textwidth]{figs/primary-transform.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]{Aspectos adicionales}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Tranformación entre diferentes formatos de datos
+      \begin{itemize}
+       \item \textit{Wide format} vx. \textit{long format}.
+      \end{itemize}
+
+    \end{wideitemize}
+    
+    \begin{footnotesize}
+    \begin{verbatim}
+# Wide format
+subject sex control cond1 cond2
+       1   M     7.9  12.3  10.7
+       2   F     6.3  10.6  11.1
+       3   F     9.5  13.1  13.8
+       4   M    11.5  13.4  12.9
+    \end{verbatim}
+    \end{footnotesize}
+    
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1cm}
+    \includegraphics[width=1\textwidth]{figs/primary-transform.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]{Aspectos adicionales}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+        
+    \begin{footnotesize}
+    \begin{verbatim}
+# Long format
+subject sex condition measurement
+       1   M   control         7.9
+       1   M     cond1        12.3
+       1   M     cond2        10.7
+       2   F   control         6.3
+       2   F     cond1        10.6
+       2   F     cond2        11.1
+       3   F   control         9.5
+       3   F     cond1        13.1
+       3   F     cond2        13.8
+       4   M   control        11.5
+       4   M     cond1        13.4
+       4   M     cond2        12.9 
+    \end{verbatim}
+    \end{footnotesize}
+    
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{1cm}
+    \includegraphics[width=1\textwidth]{figs/primary-transform.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
