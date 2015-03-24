@@ -114,7 +114,7 @@ De todas ellas, el logaritmo (natural o decimal) es una de las más usuales.
 ```{r}
 par(mfrow=c(1, 2))
 plot(density(UN$gdp, na.rm=T), xlab="GDP", main="Sin transformar")
-plot(density(log10(UN$gdp), na.rm=T), data=airquality, xlab="GDP", main="log10(UN$gdp)")
+plot(density(log10(UN$gdp), na.rm=T), xlab="GDP", main="log10(UN$gdp)")
 ```
 
 ```{r}
