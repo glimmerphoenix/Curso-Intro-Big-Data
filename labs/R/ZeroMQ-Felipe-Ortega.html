@@ -236,7 +236,7 @@ socket_rep = context.socket(zmq.REP)
 # Server is bound to a port
 socket_rep.bind(&quot;tcp://127.0.0.1:30000&quot;)
 # Using built-in JSON serialization (pyzmq)
-message = channel_rep.recv_json()
+message = socket_rep.recv_json()
 print &quot;Received message: %s&quot; % message
 print &#39;Sending &quot;world&quot;&#39;
 socket_rep.send_json(&quot;world&quot;)</pre>
