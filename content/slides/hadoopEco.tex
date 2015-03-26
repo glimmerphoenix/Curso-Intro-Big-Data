@@ -334,7 +334,7 @@
 \begin{frame}[fragile]
   \frametitle{Proyectos Hadoop: Hive vs. Pig}
   \begin{wideitemize}
-      \item Cómo lo haríamos en Apache Pig [7].
+      \item Cómo lo haríamos en Apache Hive [7].
   \end{wideitemize}
   \begin{verbatim}
    INSERT INTO ValuableClicksPerDMA
@@ -354,7 +354,7 @@
 \begin{frame}[fragile]
   \frametitle{Proyectos Hadoop: Hive vs. Pig}
     \begin{wideitemize}
-      \item Cómo lo haríamos en Apache Pig [7].
+      \item Cómo lo haríamos en Apache Pig [5].
     \end{wideitemize}
   \fontsize{8pt}{12pt}\selectfont
   \begin{verbatim}
@@ -403,17 +403,43 @@
 
 \begin{frame}{Proyectos Hadoop: Flujos de datos}
  \begin{columns}[T]
-    \begin{column}{.8\textwidth}
+    \begin{column}{.5\textwidth}
      \begin{wideitemize}
-      \item Storm, Flume
+      \item Apache \textbf{Storm}. Framework para procesamiento de flujos de
+      datos sobre HDFS, utilizando también procesado de datos en memoria.
+      \item Se basa en dos tipos de componentes principales:
+      \begin{itemize}
+       \item Spout: Fuente de datos. Emite flujos de datos.
+       \item Bolt: Procesador de datos. Puede emitir nuevos flujos.
+      \end{itemize}
+
     \end{wideitemize}
     \end{column}
     
-    \begin{column}{.2\textwidth}
+    \begin{column}{.5\textwidth}
     \vspace*{.7cm}
-    \includegraphics[width=1\textwidth]{figs/Apache-Mahout.jpeg}
+    \includegraphics[width=1\textwidth]{figs/Storm-topology.jpg}
     \end{column}
   \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Flujos de datos}
+     \begin{wideitemize}
+      \item Apache \textbf{Flume}. Servicio distribuido de recolección, agregación
+      y transmisión de colas de mensajes, típicamente registros (logs) de sistemas.
+      \begin{itemize}
+       \item Generalizable a cualquier otra fuente de datos en streaming (correo
+       electrónico, redes sociales, etc.).
+       \item Los ``agentes'' de Flume abstraen las labores de adquisición de datos
+       de una fuente y almacenamiento de esos datos, hasta que son consumidos (por
+       ejemplo, reenviándose a otro agente, o guardándolos de forma persistente en
+       un sistema HDFS).
+      \end{itemize}
+
+    \end{wideitemize}
 
 \end{frame}
 
@@ -481,6 +507,9 @@
   \item Murthy, C. A., Vavilapalli, V. K., Eadline, D., Niemiec, J. Markham, J.
   \textit{Apache Hadoop YARN}. Addison-Wesley Professional, Mar. 2014.
   \item Fasale, A., Kumar, N. \textit{YARN Essentials}. Packt Publishing. Feb. 2015. 
+  \item  Alan Gates. Comparing Pig Latin and SQL for Constructing Data Processing 
+ Pipelines.
+ \url{http://developer.yahoo.com/blogs/hadoop/comparing-pig-latin-sql-constructing-data-processing-pipelines-444.html}
  \end{enumerate}
 
 \end{frame}
