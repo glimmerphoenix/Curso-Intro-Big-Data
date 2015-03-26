@@ -1,0 +1,487 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ecosistema Apache Hadoop}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Ecosistema Apache Hadoop}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{figs/hadoop-ecosystem.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Ecosistema Apache Hadoop}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1.1\textwidth]{figs/hadoop-ecosystem-full2.png}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Google File System}
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{figs/1000px-GoogleFileSystemGFS.png}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{HDFS}
+ \begin{wideitemize}
+  \item Modelado a partir del Google File System [2].
+  \item Optimizado para maximizar el throughput, mejor cuanto más grandes
+  sean los archivos.
+  \item Tamaño de bloques grande, intenta optimizar distribución de datos
+  en nodos siguiendo principios de localidad espacial y temporal (similar
+  a jerarquía de memoria).
+  \item Las primeras versiones utilizaban un nodo para metadatos (\textit{NameNode})
+  y varios nodos para almacenar y trabajar con los datos (\textit{DataNodes}). En las
+  versiones más modernas, datos y metadatos están distribuidos.
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Almacenamiento en la nube}
+ \begin{wideitemize}
+  \item Es posible poder ejecutar instancias Hadoop sobre servicios de computación
+  en la nube.
+  \item Ejemplo: servicios web de Amazon.
+  \begin{itemize}
+   \item Podemos utilizar instancias de cómputo y almacenamiento de datos en Amazon
+   EC2 para ejecutar nuestras tareas desde Hadoop (importación de recursos).
+   \item Adicionalmente, Amazon también proporciona Amazon Elastic MapReduce (EMR), un
+   entorno de gestión alternativo similar a Hadoop, que permite gestionar las tareas
+   y recursos de cluster.
+   \item EMR también puede albergar otros entornos para procesado de flujos de datos,
+   como Apache Spark o Presto.
+  \end{itemize}
+  
+  \item Otros proveedores: Microsoft Azure, etc.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item El núcleo de todo el ecosistema de aplicaciones.
+  \item Hadoop Common Package (abstracciones) + HDFS (sistema de ficheros distribuido) +
+  YARN (MapReduce engine).
+  \item Se aplica el paradigma MapReduce a datos almacenados en múltiples nodos.
+  \item Arquitectura Maestro-Esclavo (en su primera versión).
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+\begin{itemize}
+ \item Infraestructura para Hadoop (MR1).
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{figs/hadoop-infrastructure.png}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+\begin{itemize}
+ \item Infraestructura para Hadoop (MR1).
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=1\textwidth]{figs/hadoop-data-manag.png}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item Gestión de tareas MapReduce (MR1).
+  \item El JobTracker mantiene en memoria del nodo maestro información sobre todas
+  las tareas planificadas y en ejecución.
+  \item Se gestionan tanto las tareas de tipo \texttt{map} como las de tipo \texttt{reduce}, 
+  asociadas a trabajos de alto nivel enviados por el cliente.
+  \item Límites versión 1 (MapReduce/MR1).
+  \begin{itemize}
+   \item \textasciitilde 5.000 NODOS, 40.000 tareas concurrentes.
+   \item Distribución fija de recursos entre procesos \textit{map} y \texttt{reduce}.
+   \item Fallos acaban con trabajos en ejecución y encolados (catastrófico).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item Principales diferencias de YARN (MR2) respecto a MapReduce (MR1).
+  \begin{itemize}
+   \item Soporte para mútiples estrategias (batch, flujo de datos, interactivo).
+   \item Data Operating System (un solo conjunto de datos, múltiples instancias).
+   \item Gestión de metadatos y trabajos distribuido.
+   \item Mejor aprovechamiento de los recursos de computación y almacenamiento.
+   \item Introducción de aspectos de seguridad y autenticación en el diseño.
+   \item Compatibilidad hacia atrás (evitar grandes cambios para Hive, Pig, etc.).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+\begin{itemize}
+ \item YARN/MR2.
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.65\textwidth]{figs/YARN-schema.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item Principales elementos de YARN (MR2).
+  
+  \item \textbf{Aplicación}.
+  \begin{itemize}
+   \item Representación a alto nivel de un trabajo de procesamiento de datos.
+   \item Puede ser un trabajo MapReduce o un script de shell.
+  \end{itemize}
+  
+  \item \textbf{Contenedor}.
+  \begin{itemize}
+   \item Unidades de particionado de los recursos hardware subyacentes.
+   \item Permiten la distribución de los recursos computacionales entre diferentes
+   aplicaciones en ejecución, intentando maximizar el aprovechamiento de los mismos.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item Principales componentes de YARN (MR2).
+  
+  \item \textbf{Resource Manager}.
+  \begin{itemize}
+   \item Gestión de tareas de alto nivel.
+   \item Gestión de colas jerárquicas de trabajos.
+  \end{itemize}
+  
+  \item \textbf{Application Master}.
+  \begin{itemize}
+   \item Uno por cada instancia a nivel de aplicación.
+   \item Gestiona recursos, progreso de tareas, planificación, etc.
+  \end{itemize}
+
+  
+  \item \textbf{Node Manager}.
+  \begin{itemize}
+   \item Agentes encargados de la gestión y monitorización de contenedores en
+   cada nodo del cluster.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Hadoop}
+ \begin{wideitemize}
+  \item Últimos avances en YARN (MR2).
+  
+  \item El Resource Manager continúa siendo un punto de fallo singular. Genera
+  graves trastornos en caso de pérdida de información.
+  
+  \item Solución: intentar reconstruir la información que contiene en caso de fallo.
+  
+  \item Propuesta: Zookeper (u otro meta-gestor de recursos) debe monitorizar las
+  instancias de Resource Managers y actuar en caso de fallo.
+
+ \end{wideitemize}
+
+\end{frame}
+
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Apache Hbase}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Base de datos NoSQL, diseñada a imagen de Google BigTable, escrita
+      en Java.
+      \item Orientada a partición por columnas.
+      \item Tolerancia a fallos.
+      \item Compresión de datos, operaciones en memoria, filtros Bloom.
+      \item Funciona sobre HDFS.
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=.9\textwidth]{figs/Apache-HBase.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Apache Cassandra}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Base de datos NoSQL liberada por Facebook en 2009.
+      \item Especialmente pensada para requisitos de alta disponibilidad.
+      \item Replicación en múltiples nodos (incluso alejados geográficamente).
+      \item Diferentes niveles de consistencia de datos entre réplicas
+      (configurable).
+      \item No admite operaciones como JOIN ni subconsultas.
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Cassandra.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Apache Hive}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Sistema \textit{datawarehouse} que ejecuta sobre Hadoop.
+      \item Programar operaciones para análisis de datos directamente sobre
+      Hadoop puede llegar a ser muy tedioso.
+      \item Hive proporciona un lenguaje de abstracción similar a las consultas
+      SQL.
+      \item Procesado de logs (tráfico web, sistemas), minería de texto, 
+      indexación de documentos, inteligencia de negocio, predicciones y contraste
+      de hipótesis.
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Apache-Hive.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Apache Pig}
+ \begin{columns}[T]
+    \begin{column}{.75\textwidth}
+     \begin{wideitemize}
+      \item Creado por Yahoo.
+      \item Resuelve el problema de evitar escribir flujos de análisis de datos
+      en Java para Hadoop.
+      \item Pig-Latin: Lenguaje declarativo para trabajar con flujos de datos.
+      \item Estrategia diferente a Hive, que está más orientado a consultas tipo SQL [7].
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.25\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Apache-Pig.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Proyectos Hadoop: Hive vs. Pig}
+  \begin{wideitemize}
+      \item Cómo lo haríamos en Apache Pig [7].
+  \end{wideitemize}
+  \begin{verbatim}
+   INSERT INTO ValuableClicksPerDMA
+   SELECT dma, COUNT(*)
+   FROM geoinf JOIN (
+       SELECT name, ipaddr
+       FROM users join clicks 
+       ON (users.name = clicks.user)
+       WHERE value > 0;) USING ipaddr
+   GROUP BY dma;
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Proyectos Hadoop: Hive vs. Pig}
+    \begin{wideitemize}
+      \item Cómo lo haríamos en Apache Pig [7].
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+   Users          = load 'users' as (name, age, ipaddr);
+   Clicks         = load 'clicks' as (user, url, value);
+   ValuableClicks = filter Clicks by value > 0;
+   UserClicks     = join Users by name, ValuableClicks by user;
+   Geoinfo        = load 'geoinfo' as (ipaddr, dma);
+   UserGeo        = join UserClicks by ipaddr, Geoinfo by ipaddr;
+   ByDMA          = group UserGeo by dma;
+   ValuableClicksPerDMA = foreach ByDMA generate group, 
+   COUNT(UserGeo);
+   store ValueClicksPerDMA into 'ValuableClicksPerDMA';
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Apache Mahout}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+     \begin{wideitemize}
+      \item Construcción de bibliotecas de machine learning sobre Hadoop.
+      \item Clustering (K-means, K-means con lógica difusa).
+      \item Sistemas de recomendación.
+      \item Múltiples clasificadores:
+      \begin{itemize}
+       \item Regresión logística.
+       \item Naive Bayes.
+       \item Árboles de decisión.
+       \item Random forest, etc. 
+      \end{itemize}
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Apache-Mahout.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Flujos de datos}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+     \begin{wideitemize}
+      \item Storm, Flume
+    \end{wideitemize}
+    \end{column}
+    
+    \begin{column}{.2\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Apache-Mahout.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Proyectos Hadoop: Gestión de flujos de trabajo}
+
+     \begin{wideitemize}
+      \item \textbf{Zookeper}. Gestión de procesos distribuidos.
+      \begin{itemize}
+       \item Registro de nombres.
+       \item Monitorización y alta disponibilidad.
+       \item Coordinación: información de estado, ejecución de tareas, etc.
+      \end{itemize}
+      
+      \item \textbf{Oozie}. Planificador de tareas Hadoop.
+      \begin{itemize}
+       \item Funciona principalmente con flujos de tareas Hadoop y Pig.
+       \item Proporciona un sistema para definir el grafo de tareas y dependencias
+       entre ellas, de manera que podamos organizar la ejecución de actividades
+       complejas.
+      \end{itemize}
+
+    \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Otros proyectos: Procesamiento \textit{streaming}}
+  \begin{wideitemize}
+    \item Apache \textbf{Samza}: Framework para procesamiento de flujos de datos,
+     concebido para su utilización junto a Apache Kafka y YARN.
+    \begin{itemize}
+     \item Combina un sistema de streaming de datos (Apache Kafka) con un gestor
+     de recursos (que puede ser YARN) y una API que ofrece primitivas y rutinas
+     de procesamiento de flujos de datos.
+    \end{itemize}
+    
+    \item Apache \textbf{Kafka}. Sistema \textit{message broker} para gestionar 
+     flujos de datos de alta velocidad y elevado throughput. Fue creado originalmente
+     para tratamiento de logs de eventos en la plataforma LinkedIn, pero su uso
+     se puede generalizar a otros tipos de flujos de datos.
+     \begin{itemize}
+     \item Puede funcionar en combinación con Samza, YARN, Spark, etc.
+     \item Optimizado para procesamiento de grandes volúmenes de mensajes minimizando
+     las probabilidades de pérdida de información.
+    \end{itemize}
+    
+    \item Apache Spark.
+    \begin{itemize}
+     \item Lo veremos en detalle en la próxima sesión.
+    \end{itemize}
+      
+    \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Referencias}
+ \begin{enumerate}
+  \item Holmes, A. \textit{Hadoop in Practice}. Manning Publications, 2012.
+  \item Google File System \url{http://research.google.com/archive/gfs.html}
+  \item Murthy, C. A., Vavilapalli, V. K., Eadline, D., Niemiec, J. Markham, J.
+  \textit{Apache Hadoop YARN}. Addison-Wesley Professional, Mar. 2014.
+  \item Fasale, A., Kumar, N. \textit{YARN Essentials}. Packt Publishing. Feb. 2015. 
+ \end{enumerate}
+
+\end{frame}
+
