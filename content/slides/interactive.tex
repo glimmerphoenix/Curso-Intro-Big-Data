@@ -1,0 +1,481 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Análisis de flujos de datos e interactivo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Procesamiento offline vs. real-time}
+ \begin{wideitemize}
+  \item Un gran problema de Hadoop es que, a pesar de distribuir tareas y datos
+  entre muchos nodos, puede tardar mucho.
+  \item Necesidad de sistemas que puedan realizar consultas a gran velocidad
+  (\textbf{interactivas}) sobre grandes volúmenes de datos.
+  \item Ejemplos
+  \begin{itemize}
+   \item Apache Spark.
+   \item Presto (Facebook).
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Apache Spark}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+     \begin{wideitemize}
+      \item Framework para análisis de datos \textit{veloz}.
+      \item Puede utilizar HDFS, pero no está ligado al diseño en dos fases 
+      característico de MapReduce.
+      \item Soporte para grafos de operaciones arbitrarios, computación en memoria
+      (cuidado con requisitos del sistema).
+      \item APIS: Scala, Java y Python, caché de datos en memoria, interfaces 
+      para exploración interactiva de datos.
+      \item Sobre el framework de análisis de flujo de datos se colocan módulos
+      que ofrecen funcionalidades específicas.
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/Spark-logo.png}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Stack de herramientas en Spark}
+\begin{wideitemize}
+ \item \url{https://amplab.cs.berkeley.edu/software/}.
+\end{wideitemize}
+
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.8\textwidth]{figs/Spark-stack.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Installing Spark}
+    \begin{wideitemize}
+    \item \url{http://spark.apache.org/downloads.html}.
+    \item \texttt{Pre-built for Hadoop 2.4 and later}
+    \item Viene con 3 entornos de programación a elegir:
+    \begin{itemize}
+      \item Shell Python (\texttt{./bin/pyspark}).
+      \item Shell Scala (\texttt{./bin/spark-shell}).
+      \item Java API (standalone app + Maven u otro builder).
+    \end{itemize}
+
+  \item Ejemplo lanzamiento shell IPython:
+  \begin{itemize}
+    \item \texttt{PYSPARK\_DRIVER\_PYTHON=ipython ./bin/pyspark}.
+    \item \texttt{PYSPARK\_DRIVER\_PYTHON=ipython 
+    PYSPARK\_DRIVER\_PYTHON\_OPTS="notebook
+    -\--pylab inline" ./bin/pyspark}
+  \end{itemize}
+
+  \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Spark en Acción (I)}
+    \begin{wideitemize}
+      \item Contado de palabras en Spark [3] con Python.
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+file = spark.textFile("hdfs://my_doc_file.txt")
+ 
+file.flatMap(lambda line: line.split())
+    .map(lambda word: (word, 1))
+    .reduceByKey(lambda a, b: a+b) 
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Spark en Acción (II)}
+    \begin{wideitemize}
+      \item Regresión logística en Spark [3] con Python.
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+points = spark.textFile(...).map(parsePoint).cache()
+w = numpy.random.ranf(size = D) # current separating plane
+for i in range(ITERATIONS):
+    gradient = points.map(
+        lambda p: (1 / (1 + exp(-p.y*(w.dot(p.x)))) - 1) * 
+    p.y * p.x).reduce(lambda a, b: a + b)
+    w -= gradient
+print "Final separating plane: %s" % w
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Arquitectura cluster en Spark}
+\begin{wideitemize}
+ \item \url{http://spark.apache.org/docs/latest/cluster-overview.html}.
+\end{wideitemize}
+
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.8\textwidth]{figs/Spark-cluster-arch.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Contexto en Spark}
+    \begin{wideitemize}
+      \item Instancia a alto nivel que controla los datos de una aplicación
+      (nodos, recursos, etc.).
+      \item El objeto \texttt{SparkContext} coordina las tareas en ejecución.
+      \item El objeto \texttt{SparkContext} puede usar varios planificadores
+      intermediarios (YARN, Mesos, etc.) para acceder a los recursos del cluster.
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+# Creación de un SparkContext en pyspark
+from pyspark import SparkConf, SparkContext
+
+conf = SparkConf().setMaster("local").setAppName("My App")
+sc = SparkContext(conf = conf)
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Planificadores de tareas}
+    \begin{wideitemize}
+      \item Por defecto, Spark utiliza un planificador de tareas FIFO.
+      \begin{itemize}
+       \item Simple, no añade sobrecarga.
+       \item Puede retrasar tareas que queden encoladas a la espera de que
+       finalicen trabajos complicados.
+      \end{itemize}
+
+    \item Desde la versión 0.8, Spark permite configurar un planificador de tareas
+    \texttt{FAIR} (similar a Round Robin).
+    \begin{itemize}
+     \item También admite configuración de \textit{pools} de tareas con diferente
+     prioridad.
+    \end{itemize}
+    
+    \item Desde la versión 1.2 Spark también permite asignación dinámica de recursos
+   del clúster (solo YARN).
+
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+# FAIR scheduler con pyspark
+val conf = new SparkConf().setMaster(...).setAppName(...)
+conf.set("spark.scheduler.mode", "FAIR")
+val sc = new SparkContext(conf)
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Resilient Distributed Datasets}
+    \begin{wideitemize}
+      \item Elemento central de programación en Spark.
+      \item Modelan una colección de objetos \textbf{inmutable}, \textbf{distribuida}
+      y \textbf{tolerante a fallos}.
+      \item Los objetos que contiene se pueden distribuir en diferentes nodos
+      del cluster para procesamiento en paralelo.
+      \item Pueden contener cualquier objeto (Python, Scala o Java) que sea
+      serializable.
+    \end{wideitemize}
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+ \frametitle{Creación de RDDs}
+ 
+ \begin{wideitemize}
+  \item Dos formas de creación:
+      \begin{itemize}
+       \item Cargando un conjunto de datos externo.
+       \item Paralelizando una colección de objetos ya existente.
+      \end{itemize}
+
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+# Carga de un conjunto de datos externo
+lines = sc.textFile("README.md")
+
+# Paralelización de una colección de objetos
+data = ['tokenA', 'tokenB', 'tokenC', 'tokenD', 'tokenE']
+distData = sc.parallelize(data)
+
+# Comprobamos
+In [5]: type(distData)
+Out[5]: pyspark.rdd.RDD
+
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+ \frametitle{Operaciones sobre RDDs}
+ 
+ \begin{wideitemize}
+
+   \item \textbf{Transformación}: Creación de un nuevo conjunto de datos a partir
+   de otro conjunto de datos inicial.
+   \item \textbf{Acción}: Devuelven un valor al programa \textit{driver} tras
+   su ejecución sobre el conjunto de datos.
+   
+  \item \textit{Lazyness}: Los RDDs solo se computan tras la primera acción
+  aplicada sobre ellos.
+
+  \item \url{http://spark.apache.org/docs/latest/programming-guide.html}
+
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+  
+lines = sc.textFile("data.txt")  ## Solo almacena puntero a datos
+lineLengths = lines.map(lambda s: len(s))  ## Todavía no se computa
+## Genera y distribuye trabajos
+totalLength = lineLengths.reduce(lambda a, b: a + b)
+
+lineLengths.persist()  ## Salva en memoria para uso posterior
+
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+ \frametitle{RDDs clave-valor}
+ 
+ \begin{wideitemize}
+
+   \item Abstracción muy útil para composición de elementos básicos en aplicaciones.
+   
+   \item Podemos aprovechar operaciones específicas para operar sobre este tipo
+   de conjuntos de datos.
+   \begin{itemize}
+    \item \texttt{reduceByKey}
+    \item \texttt{groupByKey}
+   \end{itemize}
+
+   \item La forma de creación difiere en cada lenguaje. En Python debemos pasar
+   una función que genere tuplas de dos elementos (duplas).
+
+    \end{wideitemize}
+  \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+# Número de ocurrencias de una línea en un archivo de texto
+lines = sc.textFile("data.txt")
+pairs = lines.map(lambda s: (s, 1))
+counts = pairs.reduceByKey(lambda a, b: a + b)
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Spark Streaming}
+\begin{wideitemize}
+ \item \url{http://spark.apache.org/docs/latest/streaming-programming-guide.html}.
+ 
+ \item Interfaz en Python todavía en modo experimental.
+\end{wideitemize}
+
+
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{figs/SparkStreaming.jpeg}
+\end{figure}
+
+\end{frame}
+
+
+%%---------------
+
+\begin{frame}{Data Frames y Spark SQL}
+\begin{wideitemize}
+ \item Módulo de Spark para trabajo con datos estructurados.
+ 
+ \item Permite tratar un esquema relacional como RDDs, en cualquiera de los tres
+ lenguajes soportados por el entorno.
+ 
+ \item Compatibilidad con numerosos estándares: tablas Hive, formato Parquet,
+ datos JSON (!?).
+ 
+ \item DataFrame: Abstracción para trabajar con tablas de un modelo relacional y
+ distribuir consultas SQL en varios nodos de un cluster.
+\end{wideitemize}
+
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Programación con Spark SQL}
+\begin{wideitemize}
+ \item DataFrame: Similar a una tabla en modelo relacional, equivalente al mismo
+ elemento en Python (Pandas) o en R, pero incluye optimizaciones para determinadas
+ operaciones.
+ 
+ \item Se pueden crear a partir de un RDD existente, de una tabla Hive, o de
+ otros orígenes de datos (formato Parquet, archivos JSON, etc.).
+\end{wideitemize}
+
+ \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+from pyspark.sql import SQLContext
+sqlContext = SQLContext(sc)
+
+df = sqlContext.jsonFile("examples/src/main/resources/people.json")
+df.printSchema()  # Imprime esquema del documento JSON
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}[fragile]
+  \frametitle{Programación con Spark SQL}
+\begin{wideitemize}
+ \item Podemos procesar los datos como RDDs o bien como un modelo relacional con SQL.
+\end{wideitemize}
+
+ \fontsize{8pt}{12pt}\selectfont
+  \begin{verbatim}
+# Modo RDD
+df.filter(lambda x: x.age > 21).collect()
+
+# Modo SQL
+df.registerAsTable("df_json")
+result = sqlContext.sql("SELECT * FROM df_json where age > 21").
+         collect()
+  \end{verbatim}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{MLlib}
+\begin{wideitemize}
+ \item Biblioteca Spark para algoritmos de \textit{machine learning}.
+ \item Incluye abstracciones para tipos de datos importantes en este contexto.
+ \begin{itemize}
+  \item Vectores, vectores etiquetados.
+  \item Matrices locales, matrices distribuidas.
+  \item Soporte para matrices densas y dispersas.
+ \end{itemize}
+ 
+ \item Numerosos algoritmos.
+ \begin{itemize}
+  \item Clasificación, regresión, clustering, filtrado colaborativo, reducción
+  de dimensionalidad, etc.
+  \item \url{https://spark.apache.org/docs/latest/mllib-guide.html}.
+ \end{itemize}
+
+\end{wideitemize}
+
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{GraphX}
+\begin{wideitemize}
+ \item Procesado de grafos (también en paralelo).
+ \item Introduce abstracción \texttt{Graph}: multigrafo dirigido que soporta
+ propiedades para enlaces y nodos.
+ \item Incluye una biblioteca de algoritmos para facilitar la construcción y el 
+ análisis de grafos.
+ \begin{itemize}
+  \item PageRank.
+  \item Aproximación de clusters (\textit{connected components}, \textit{triangle
+  counting}.
+ \end{itemize}
+ 
+ \item Por el momento, la única API de programación disponible es en Scala.
+
+\end{wideitemize}
+
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Presto (Facebook)}
+ \begin{columns}[T]
+    \begin{column}{.8\textwidth}
+     \begin{wideitemize}
+      \item Facebook posee uno de los almacenes de datos de mayor tamaño del
+      mundo (+300 Petabytes).
+      \item Necesidades: Análisis de grafos, machine learning y análisis
+      interactivo.
+      \item Motor de consultas SQL interactivo, enfocado en minimizar el tiempo
+      de respuesta.
+
+    \end{wideitemize}
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \vspace*{.7cm}
+    \includegraphics[width=1\textwidth]{figs/presto.jpeg}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Presto (Facebook)}
+\begin{itemize}
+ \item Pequeña demo en línea (vídeo) [5].
+\end{itemize}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=.8\textwidth]{figs/presto-demo.jpeg}
+\end{figure}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Referencias}
+ \begin{enumerate}
+  \item Karau, H., Konwwinski, A., Wendell, P., Zaharia, M. \textit{Learning Spark}.
+  O'Reilly Media Inc. Feb. 2015.
+  \item Karau, H., Sankar K. \textit{Fast Data Processing with Spark}. 2nd Ed.
+  Packt Publishing. Mar. 2015.
+  \item \url{http://spark.apache.org/examples.html}
+  \item \url{https://databricks-training.s3.amazonaws.com/index.html}
+  \item \url{https://prestodb.io/}
+ \end{enumerate}
+
+\end{frame}
