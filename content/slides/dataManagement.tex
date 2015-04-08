@@ -1,0 +1,283 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gestión de proyectos data science}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Objetivos}
+  \begin{wideitemize}
+  \item Presentar algunas estrategias (planificación) y tácticas (ejecución)
+  que conviene tener en cuenta a la hora de realizar proyectos de análisis de
+  datos, especialmente con big data.
+  
+  \item Modelado de datos, interpretación de resultados, advertencias contra
+  malas prácticas, etc.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Teorías en busca de datos...}
+  \begin{wideitemize}
+  \item A veces, los investigadores o analistas pueden comenzar con una teoría
+  que creen fundamentada, y buscan algún conjunto de datos que la valide [1].
+  
+  \item Problema: La teoría debe demostrarse para \textit{varios} (muchos)
+  conjuntos de datos diferentes, no para uno solo.
+  
+  \item Ejemplo: tomamos muchas muestras de nuestro conjunto de datos, repitiendo
+  el experimento hasta que para alguna de ellas obtengamos un resultado significativo.
+  
+  \begin{itemize}
+   \item Según la teoría de inferencia estadística (frequentista) esto está
+   garantizado.
+  \end{itemize}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Y datos en busca de teorías}
+  \begin{wideitemize}
+  \item \textit{Data fishing} [1].
+  
+  \item R. H. Coase: ``If you torture the data enough, nature will always
+  confess''.
+  
+  \item Ejemplo: Si aumentamos mucho el tamaño de nuestra muestra, siempre podremos
+  llegar a obtener resultados significativos. El problema es que solo estaremos
+  informando acerca de ``ruido significativo''.
+  
+  \item Importancia de incluir intervalos de confianza y tamaño del efecto
+  (\textit{effect size}) [4].
+  
+  \item P-valores dependen del tamaño del efecto \textit{y} del tamaño muestral.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Sobre los p-valores}
+  \begin{wideitemize}
+  
+  \item \textit{The earth is round ($p < 0.05$}).
+  \item \url{http://mark.reid.name/blog/the-earth-is-round.html}
+  
+  \item Famoso artículo de J. Cohen que despeja cualquier duda sobre la correcta
+  interpretación de los p-valores.
+  
+  \item \textbf{``el p-valor no es la probabilidad de que la hipótesis nula sea
+  cierta dados los datos observados''}.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Validación cruzada}
+  \begin{wideitemize}
+  \item A veces el analista opta por intentar utilizar todos los datos disponibles
+  para crear un modelo. Esto no suele ser una buena idea por varios motivos:
+  
+  \begin{enumerate}
+   \item Podemos tener varios subgrupos / subpoblaciones en nuestros datos, que
+   quedan enmascaradas por el conjunto.
+   
+   \begin{itemize}
+    \item Cada subgrupo puede verse afectado por un conjunto de factores distinto.
+   \end{itemize}
+
+   \item Globalmente, los datos pueden contener mucho ruido o errores. Usando
+   muestras de menor tamaño podemos controlar mejor estos aspectos.
+   
+  \end{enumerate}
+
+  \item Validación cruzada: Dividimos los datos en múltiples particiones, y ejecutamos
+  múltiples simulaciones del modelo usando en cada caso un conjunto diferente de
+  particiones para la fase de entrenamiento (o modelado) y prueba (o validación).
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Overfitting}
+  \begin{wideitemize}
+  \item Consiste en dedicar grandes esfuerzos para crear un modelo que se ajusta
+  casi perfectamente al conjunto de datos analizado...
+  
+  \item Pero que, por desgracia es inservible para una nueva muestra de datos
+  generada por el mismo proceso.
+  
+  \item Ejemplo: Podemos aumentar arbitrariamente el grado de un polinomio en un
+  modelo lineal para crear curvas que pasen exactamente por todos los puntos. Sin
+  embargo, el modelo no tendría validez \textit{descriptiva} ni \textit{predictiva}.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Paradoja de Simpson}
+  \begin{wideitemize}
+  \item Ilustrada mediante datos de matriculación en UC Berkeley.
+  \item Ocurre cuando la tendencia que aparece en diferentes grupos individuales
+  desaparece al combinarlos.
+  
+  \item Ej: parecía que las mujeres tenían menor tasa de admisiones que los hombres,
+  pero se debía a que las mujeres solicitaban mayoritariamente plazas en departamentos
+  con elevadas tasas de rechazo de admisión.
+  
+  \item \small{\url{http://en.wikipedia.org/wiki/Simpson\%27s_paradox}.}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Modelos generadores de datos}
+  \begin{wideitemize}
+  \item Principales ideas contenidas en [2].
+  \item Los procesos (naturales o de otra índole) producen datos que podemos capturar
+  para intentar estudiarlos y comprenderlos.
+  \item Para ello creamos modelos que también producen datos (artificiales). Buscamos
+  entonces que los datos producidor por el modelo propuesto se parezcan lo más posible
+  a los datos generados por el proceso real.
+  \begin{enumerate}
+   \item El modelo produce datos.
+   \item El modelo tiene parámetros desconocidos, que debemos estimar.
+   \item Los datos del proceso real se pueden usar para reducir la incertidumbre
+   sobre los parámetros desconocidos.
+  \end{enumerate}
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Estimación mediante función de verosimilitud}
+  \begin{wideitemize}
+  \item Likelihood function.
+  \item Nos da una idea de la probabilidad de obtener los datos observados
+  en función de los valores que adquieran los parámetros desconocidos de nuestro
+  modelo.
+  \item MLE: Escogemos los valores de los parámetros que maximizan la probabilidad
+  de obtener los datos generados por el proceso real.
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Correlaciones y causalidad}
+  \begin{wideitemize}
+  \item ``Correlation does not even imply correlation''. A. Gelman.
+  
+  \item El hecho de que encontremos correlaciones en los datos que estamos
+  analizando no implica que esas correlaciones existan entre las dos poblaciones
+  de interés que comparamos.
+  
+  \item Sin embargo, es cierto que la correlación es una de las pocas (si no la
+  única) formas en las que podemos detectar causalidad.
+  
+  \item Importancia de los métodos experimentales para poder determinar con certeza
+  relaciones causa-efecto.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Idem con series temporales}
+  \begin{wideitemize}
+  \item \url{http://svds.com/post/avoiding-common-mistake-time-series}.
+  
+  \item Basta con añadir una tendencia parecida a dos series temporales totalmente
+  aleatorias para que muestren correlación entre ambas.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Correlaciones espúreas}
+  \begin{wideitemize}
+  \item \url{http://www.tylervigen.com/}
+ \end{wideitemize}
+ 
+ \begin{figure}
+ \centering
+ \includegraphics[width=.95\textwidth]{figs/spurious-corr.png}
+\end{figure}
+
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Sesgo de grandes datos}
+  \begin{wideitemize}
+  \item Existe una tendencia generalizada a creer que los grandes conjuntos de
+  datos pueden aportar resultados mucho más validos que conjuntos de datos más
+  pequeños.
+  
+  \item Ejemplo: dificultades para identificar marcadores biológicos en estudios
+  de medicina sobre enfermedades.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Silos de datos}
+  \begin{wideitemize}
+  \item Ejemplo mencionado en [3].
+  
+  \item En muchas organizaciones (especialmente las de gran tamaño) existen
+  numerosos almacenes de datos que no están interconectados entre sí.
+  
+  \item A veces no se intercambian datos por puro desconocimiento, pero muchas
+  otras ocasiones no se intercambian por otros motivos (privacidad, recelo, etc.).
+  
+  \item En ocasiones el analista puede esperar obtener más información con diferentes
+  conjuntos de datos que describan el mismo proceso, pero pueden surgir muchos
+  problemas:
+  
+  \begin{itemize}
+   \item Inconsistencias.
+   \item Diferencias en nomenclatura, identificadores etc.
+  \end{itemize}
+
+  \item Ejemplo: Unificación de bases de datos de compañías de telefonía móvil en España.
+
+ \end{wideitemize}
+
+\end{frame}
+
+%%---------------
+
+\begin{frame}{Referencias}
+\begin{enumerate}
+ \item Jules J. Berman. \textit{Principles of big data}. Morgan Kaufmann. 2013.
+ \item Westfall, P., Kenning, K.S.S. \textit{Understanding Advanced Statistical Methods}.
+ \item Manoochehri, M. Data Just Right. Addison-Wesley Professional. 2014.
+ \item Coe, R. (2002). It's the effect size, stupid: What effect size is and why it is important.
+\end{enumerate}
+
+
+\end{frame}
+
+%%---------------
+
